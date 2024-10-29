@@ -1,0 +1,88 @@
+body {
+    font-family: 'Noto Sans C JK KR', sans-serif;
+    color: #191919;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    font-size: 25px;
+    border-bottom: 1px solid #191919;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.loginForm {
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.loginForm p {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+fieldset.outerline {
+    width: 400px;
+    height: 240px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.outerline ul li {
+    margin-bottom: 5px;
+}
+
+input[type='text'],
+input[type='password'] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button[type='submit'] {
+    width: calc(100% - 20px);
+    background-color: #fee500;
+    color: #191919;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+button[type='submit']:hover {
+    background-color: #fdd835;
+}
+
+a {
+    display: block;
+    margin-top: 10px;
+    color: #191919;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+a:hover {
+    text-decoration: underline;
+}

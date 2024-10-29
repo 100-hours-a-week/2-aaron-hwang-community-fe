@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="with=device-width", initial-scale="1.0">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <title>KakaoHub</title>
+</head>
+
+<body>
+    <header>
+        <h1> KakaoHub </h1>    
+    </header>
+    <main>
+        <article class = "loginForm">
+            <p>로그인</p>
+            <form action = "/login" method="POST">
+                <fieldset class="outerline">
+                    <ul>
+                        <li>
+                            <label for="uid">이메일</label>
+                        </li>
+                        <li>
+                            <input type="text" id="uid" name="uid" placeholder="이메일을 입력해주세요" required autofocus></input>
+                        </li>
+                        <li>
+                            <label for="pwd">비밀번호</label>
+                        </li>
+                        <li>
+                            <input type="password" id="pwd" name="pwd" placeholder="비밀번호를 입력하세요" required></input>
+                        </li>
+                    </ul>
+                    <button type="submit">로그인</button>          
+                </fieldset>
+                
+            </form>
+            <a href="#">회원가입</a>
+        </article>
+    
+    </main>
+
+</body>
