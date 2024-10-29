@@ -1,4 +1,4 @@
-import login from '../models/user.js';
+import { login, signup } from '../models/user.js';
 
 function loginUser(req, res) {
     const { email, password } = req.body;
@@ -7,8 +7,16 @@ function loginUser(req, res) {
             console.log(err);
             return res.status(500).send(err);
         }
-        if (!user) return res.status(400).send('Invalid credentials');
-        return res.status(200).send(`Welcome, ${user.email}`);
+        if (!user) return res.status(400).send('로그인에 실패했습니다.');
+        return res.status(200).send(`안녕하세요, ${user.email}`);
     });
 }
-export default loginUser;
+
+function signupUser(req, res) {
+    const { email, password } = req.body;
+    signup(email, password, (err, result) => {
+        if (err) return res.status(500).send('가입에 실패했습니다.');
+        return res.status(200).send('회원가입 성공!');
+    });
+}
+export { loginUser, signupUser };
