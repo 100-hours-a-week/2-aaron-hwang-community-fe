@@ -21,6 +21,10 @@ main {
     flex-direction: column;
     width: 100%;
 }
+.spacer {
+    height: 10vh;
+    width: 100%
+}
 
 .loginForm {
     text-align: center;
@@ -34,10 +38,10 @@ main {
 
 fieldset.outerline {
     width: 400px;
-    height: 240px;
     border-radius: 8px;
     border: 1px solid #ccc;
     padding: 10px;
+    padding-bottom: 30px;
     margin-bottom: 10px;
 }
 
@@ -47,6 +51,9 @@ ul {
 }
 
 .outerline ul li {
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
     margin-bottom: 5px;
 }
 
