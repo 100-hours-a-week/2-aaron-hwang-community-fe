@@ -1,7 +1,11 @@
+import path from 'path';
 import { login, signup } from '../models/user.js';
+
+const __dirname = path.resolve();
 
 function loginUser(req, res) {
     const { email, password } = req.body;
+
     login(email, password, (err, user) => {
         if (err) {
             console.log(err);
@@ -12,6 +16,10 @@ function loginUser(req, res) {
     });
 }
 
+function getSignup(req, res) {
+    return res.sendFile(path.join(__dirname, 'views', 'signup.html'));
+}
+
 function signupUser(req, res) {
     const { email, password } = req.body;
     signup(email, password, (err, result) => {
@@ -19,4 +27,5 @@ function signupUser(req, res) {
         return res.status(200).send('회원가입 성공!');
     });
 }
-export { loginUser, signupUser };
+
+export { loginUser, signupUser, getSignup };

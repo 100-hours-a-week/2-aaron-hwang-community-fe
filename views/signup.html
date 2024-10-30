@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width", initial-scale="1.0">
+    <link rel="stylesheet" type="text/css" href="/css/signup.css">
+    <title>KakaoHub</title>
+</head>
+
+<body>
+    <header>
+        <h1> KakaoHub </h1>    
+    </header>
+    <main>
+        <article class = "spacer"></article>
+        <article class = "signupForm">
+            <p>회원 가입</p>
+            <form action = "/signup" method="POST">
+                <fieldset class="outerline">
+                    <ul>
+                        <li class="label-li">
+                            <label for="profile_img">프로필 사진</label>
+                        </li>
+                        <li class="profile-img-li">
+                            <div class="profile-img-wrapper">
+                                <img id="profilePreview" src="#" alt="프로필 사진 미리보기" />
+                                <input type="file" id="profile_img" name="profile_img" accept="image/*" required />
+                            </div>
+                        </li>
+                        <li>
+                            <label for="uid">이메일*</label>
+                        </li>
+                        <li>
+                            <input type="text" id="uid" name="uid" placeholder="이메일을 입력해주세요" required></input>
+                        </li>
+                        <li>
+                            <label for="pwd">비밀번호*</label>
+                        </li>
+                        <li>
+                            <input type="password" id="pwd" name="pwd" placeholder="비밀번호를 입력하세요" required></input>
+                        </li>
+                        <li>
+                            <label for="pwd2">비밀번호 확인*</label>
+                        </li>
+                        <li>
+                            <input type="password" id="pwd2" name="pwd2" placeholder="비밀번호를 한번 더 입력하세요" required></input>
+                        </li>
+                        <li>
+                            <label for="username">닉네임*</label>
+                        </li>
+                        <li>
+                            <input type="text" id="username" name="username" placeholder="닉네임을 입력하세요" required></input>
+                        </li>
+                    </ul>
+                    <button type="submit">회원가입</button>          
+                </fieldset>
+                
+            </form>
+            <a href="/">로그인하러 가기</a>
+        </article>
+    
+    </main>
+
+</body>
