@@ -1,12 +1,12 @@
 import connection from './db.js';
 
+/*
 function login(email, password, callback) {
     const sql = `SELECT * FROM user WHERE email = ? AND password = ?`;
     connection.query(sql, [email, password], (err, results) => {
         if (err) throw err;
         if (results.length > 0) {
             const user = results[0];
-            console.log('Login success: ', user);
             callback(null, user);
         } else {
             callback(null);
@@ -33,7 +33,7 @@ function formatDate(timestamp) {
 
 function signup(email, password, callback) {
     const sql = 'INSERT INTO user (email, password, created_at) VALUES (?, ?, ?)';
-    console.log(Date.now());
+
     connection.query(sql, [email, password, formatDate(Date.now())], (err, result) => {
         if (err) throw err;
         callback(null, result); // 성공 시 삽입 결과 반환
@@ -41,3 +41,4 @@ function signup(email, password, callback) {
 }
 
 export { login, signup };
+*/
