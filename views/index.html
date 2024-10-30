@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width", initial-scale="1.0">
     <link rel="stylesheet" type="text/css" href="/css/index.css">
-    <script type="text/javascript" src="/community/public/javascript/index.js"></script> 
     <title>KakaoHub</title>
 </head>
 
@@ -14,16 +13,16 @@
     </header>
     <main>
         <article class = "spacer"></article>
-        <article class = "loginForm">
+        <article id = "loginForm" class = "loginForm">
             <p>로그인</p>
-            <form action = "/login" method="POST">
+            <form action = "http://localhost:8000/api/login" method="POST">
                 <fieldset class="outerline">
                     <ul>
                         <li>
-                            <label for="uid">이메일</label>
+                            <label for="email">이메일</label>
                         </li>
                         <li>
-                            <input type="text" id="uid" name="uid" placeholder="이메일을 입력해주세요" required autofocus></input>
+                            <input type="text" id="email" name="email" placeholder="이메일을 입력해주세요" required autofocus></input>
                         </li>
                         <li>
                             <label for="pwd">비밀번호</label>
@@ -36,9 +35,10 @@
                 </fieldset>
                 
             </form>
-            <a href="/signup">회원가입</a>
+            <a id="signupLink" href="/signup">회원가입</a>
         </article>
     
     </main>
+    <script src="/javascript/index.js"></script> 
 
 </body>

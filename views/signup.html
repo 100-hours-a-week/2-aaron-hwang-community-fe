@@ -15,7 +15,7 @@
         <article class = "spacer"></article>
         <article class = "signupForm">
             <p>회원 가입</p>
-            <form action = "/signup" method="POST">
+            <form action = "http://localhost:8000/api/signup"  method="POST">
                 <fieldset class="outerline">
                     <ul>
                         <li class="label-li">
@@ -28,10 +28,10 @@
                             </div>
                         </li>
                         <li>
-                            <label for="uid">이메일*</label>
+                            <label for="email">이메일*</label>
                         </li>
                         <li>
-                            <input type="text" id="uid" name="uid" placeholder="이메일을 입력해주세요" required></input>
+                            <input type="text" id="email" name="email" placeholder="이메일을 입력해주세요" required></input>
                         </li>
                         <li>
                             <label for="pwd">비밀번호*</label>
@@ -60,5 +60,5 @@
         </article>
     
     </main>
-
+    <script src="/javascript/signup.js"></script> 
 </body>
