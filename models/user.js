@@ -1,4 +1,4 @@
-import connection from './db.js';
+//import connection from './db.js';
 
 /*
 function login(email, password, callback) {
