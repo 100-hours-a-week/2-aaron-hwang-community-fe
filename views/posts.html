@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width", initial-scale="1.0">
+    <link rel="stylesheet" type="text/css" href="/css/posts.css">
+    <title>KakaoHub</title>
+</head>
+<body>
+    <header>
+        <div class="header-spacer"></div>
+        <h1> KakaoHub </h1>    
+        <!-- 사용자 프로필 이미지 -->
+        <div class="profile-img-wrapper">
+            <div class="profile-img">
+                <img src="images/profile_img.jpg" alt="프로필 이미지">
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <article class = "search-space">
+            <!-- TODO: 검색 기능 공간 -->
+            <div class="search-space">
+                <h2>안녕하세요 게시판입니다.</h2>
+            </div>
+        </article>
+        <article class="posts">
+            <!-- 게시글 작성 버튼 -->
+            <button class="post_create" id="post_create" href="">게시글 작성</button>
+
+            <!-- 게시글 목록 -->
+            <section class="post-list" id="post-list">
+                <!-- 게시글 예시 -->
+                <fieldset class="post-outerline">
+                    <div class="post-item">
+                        <h3 class="post-title">게시글 제목이 여기에 들어갑니다</h3>
+                        <div class="post-header">
+                            <div class="post-header-wrapper">
+                                <span class="post-likes">👍 0</span>
+                                <span class="post-views">👀 2</span>
+                                <span class="post-reply">💬 3</span>    
+                            </div>
+                            <div class="post-header-wrapper">
+                                <span class="post-date">2024-10-31 00:00:00</span>
+                            </div>
+                        </div>
+                        <div class="post-footer">
+                            <span class="post-author">🧑‍💻 void</span>
+                            <button class="post-detail-button">자세히 보기</button>
+
+                        </div>
+                        
+                    </div>
+                </fieldset>
+                
+                <!-- 여기서부터 인피니티 스크롤링으로 게시글이 추가됩니다 -->
+            </section>
+
+        </article>
+
+        
+    </main>
+
+    <script src="javascript/posts.js"></script>
+</body>
+</html>

@@ -7,4 +7,8 @@ const getIndex = (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
 };
 
-export default { getIndex };
+function getPosts(req, res) {
+    return res.sendFile(path.join(__dirname, 'views', 'posts.html'));
+}
+
+export default { getIndex, getPosts };
