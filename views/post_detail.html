@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="kr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width", initial-scale="1.0">
+        <link rel="stylesheet" type="text/css" href="/css/post_detail.css">
+        <title>KakaoHub</title>
+    </head>
+    <body>
+        <header>
+            <div class="backButton-wrapper">
+                <button id="backButton">&lt;</button>
+            </div>
+            <h1> KakaoHub </h1>    
+            <!-- 사용자 프로필 이미지 -->
+            <div class="profile-img-wrapper">
+                <div class="profile-img">
+                    <img src="/images/profile_img.jpg" alt="프로필 이미지">
+                </div>
+            </div>
+        </header>
+        <main>
+            <article class="post-detail">
+                <h2 style="margin-left:20px;">제목 1</h2>
+                <div class='post-detail-header'>
+                    <div class="post-info">
+                        <div class="author-img">
+                            <img src="/images/profile_img.jpg" alt="프로필 이미지">
+                        </div>
+                        <span class="post-author">aaron</span>
+                        <span class="post-date">2024-10-31 15:30:00</span>
+                    </div>
+                    <div class="post-detail-button-wrapper">
+                        <button id="editPost">수정</button>
+                        <button id="deletePost">삭제</button>
+                    </div>
+                </div>
+                <div class="post-detail-body">
+                    <img class="post-content-img" src="/images/background_yellow.jpg"></img>
+                    <div class="post-content">
+                        <p>여기에 게시글 내용이 들어갑니다. 게시글 내용 예시입니다.</p>
+                    </div>
+                </div>
+                <div class="post-detail-footer">
+                    <span>좋아요: 123</span>
+                    <span>조회수: 123</span>
+                    <span>댓글: 123</span>
+                </div>
+            </article>
+            <article class="comment-article">
+                <textarea id="commentInput"class="comment-input" placeholder="댓글을 남겨보세요"></textarea>
+                <div class="button-wrapper">
+                    <button id="submitComment" class="submit-button" disabled>댓글 등록</button>
+                </div>
+                <div class="comment-list">
+                    <!-- 댓글 리스트 예시 -->
+                    <div class="comment-item">
+                        <div class='comment-header'>
+                            <div class="post-info">
+                                <div class="comment-author-img">
+                                    <img src="/images/profile_img.jpg" alt="프로필 이미지">
+                                </div>
+                                <span class="comment-author">Edwin</span>
+                                <span class="comment-date">2024-10-31 15:30:00</span>
+                            </div>
+                            <span id= "comment-content" class="comment-content">마 니 든킨도나쓰 무봤나</p>
+                        </div>
+                        <div class="post-detail-button-wrapper">
+                            <button id="editComment">수정</button>
+                            <button id="deleteComment">삭제</button>
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </article>
+
+            <!-- 모달 -->
+            <div id="modalOverlay" class="modal-overlay">
+                <div class="modal-content">
+                    <p id="modalMessage">모달 메시지</p>
+                    <button id="modalConfirm">확인</button>
+                    <button id="modalCancel">취소</button>
+                </div>
+            </div>
+        </main>
+        <script src="/javascript/post_detail.js"></script>
+    </body>
+</html>

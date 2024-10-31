@@ -51,29 +51,28 @@ document.addEventListener('DOMContentLoaded', () => {
     dummyPosts.forEach(post => {
         const postElement = document.createElement('fieldset');
         postElement.className = 'post-outerline';
-        
+
         // 게시글 제목, 날짜, 작성자 등 표시
         postElement.innerHTML = `
-                <div class="post-item">
-                        <h3 class="post-title">${post.title.length > 26 ? post.title.slice(0, 26) + "..." : post.title}</h3>
-                        <div class="post-header">
-                            <div class="post-header-wrapper">
-                                <span class="post-likes">👍 ${post.likes >= 1000 ? (post.likes / 1000).toFixed(1) + 'k' : post.likes}</span>
-                                <span class="post-reply">💬 ${post.comments}</span>
-                                <span class="post-views">👀 ${post.views >= 1000 ? (post.views / 1000).toFixed(1) + 'k' : post.views}</span>
-                            </div>
-                            <div class="post-header-wrapper">
-                                <span class="post-date">${post.createdAt}</span>
-                            </div>                                
+            <div class="post-item">
+                    <h3 class="post-title">${post.title.length > 26 ? post.title.slice(0, 26) + "..." : post.title}</h3>
+                    <div class="post-header">
+                        <div class="post-header-wrapper">
+                            <span class="post-likes">👍 ${post.likes >= 1000 ? (post.likes / 1000).toFixed(1) + 'k' : post.likes}</span>
+                            <span class="post-reply">💬 ${post.comments}</span>
+                            <span class="post-views">👀 ${post.views >= 1000 ? (post.views / 1000).toFixed(1) + 'k' : post.views}</span>
                         </div>
-                        <div class="post-footer">
-                            <span class="post-author">🧑‍💻 ${post.author}</span>
-                            <button class="post-detail-button">자세히 보기</button>
-                        </div>
-                </div>
-
+                        <div class="post-header-wrapper">
+                            <span class="post-date">${post.createdAt}</span>
+                        </div>                                
+                    </div>
+                    <div class="post-footer">
+                        <span class="post-author">🧑‍💻 ${post.author}</span>
+                        <button class="post-detail-button" onclick="location.href='/posts/${post.id}'">자세히 보기</button>
+                    </div>
+            </div>
         `;
-        
+
         postsContainer.appendChild(postElement);
     });
 });

@@ -12,5 +12,6 @@ const limiter = ratelimit({
 
 router.get('/', timeout('3s'), limiter, index.getIndex);
 router.get('/posts', index.getPosts);
+router.get('/posts/:id', index.getPostDetail);
 
 export default router;
