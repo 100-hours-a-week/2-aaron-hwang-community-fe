@@ -18,6 +18,9 @@ function loginUser(req, res) {
 function getSignup(req, res) {
     return res.sendFile(path.join(__dirname, 'views', 'signup.html'));
 }
+function getUserEdit(req, res) {
+    return res.sendFile(path.join(__dirname, 'views', 'signup.html'));
+}
 
 /*
 function signupUser(req, res) {
@@ -28,4 +31,4 @@ function signupUser(req, res) {
     });
 }
 */
-export { getSignup };
+export default { getSignup, getUserEdit };
