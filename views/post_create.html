@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width", initial-scale="1.0">
+    <link rel="stylesheet" type="text/css" href="/css/post_create.css">
+    <title>KakaoHub</title>
+</head>
+<body>
+    <header>
+        <div class="backButton-wrapper">
+            <button id="backButton">&lt;</button>
+        </div>
+        <h1> KakaoHub </h1>    
+        <!-- 사용자 프로필 이미지 -->
+        <div class="profile-img-wrapper">
+            <div class="profile-img">
+                <img src="/images/profile_img.jpg" alt="프로필 이미지">
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <article class = "header-wrapper">
+            <h2>게시글 작성</h2>
+        </article>
+        <article id="postForm" class="post-create-form">
+            <form action = "http://localhost:8000/posts/create" method="POST">
+                <div class= "title-wrapper">
+                    <label for="title">제목*</label>
+                    <input type="text" id="title" name="title" placeholder="제목을 입력해주세요. (최대 26자)"></input>
+                    <p id="title-helper" class="helper-text"></p>
+                </div>
+                <div class="content-wrapper">
+                    <label for="content">내용*</label>
+                    <textarea id="content" placeholder="내용을 입력해주세요."></textarea>
+                    <p id="content-helper" class="helper-text"></p>
+                </div>
+                <div class="file-wrapper">
+                    <label for="file">이미지</label>
+                    <input type="file" id="file">
+                </div>
+            
+                <p id="form-helper" class="helper-text"></p>
+                <div class="button-wrapper">
+                    <button id="submit-button" type="submit">완료</button>          
+                </div>
+            </form>
+        </article>
+        
+    </main>
+
+    <script src="/javascript/post_create.js"></script>
+</body>
+</html>

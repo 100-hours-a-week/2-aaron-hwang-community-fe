@@ -12,8 +12,12 @@ function getPosts(req, res) {
 }
 
 function getPostDetail(req, res) {
-    console.log(req.body);
+    //console.log(req.body);
     return res.sendFile(path.join(__dirname, 'views', 'post_detail.html'));
 }
 
-export default { getIndex, getPosts, getPostDetail };
+function getPostCreate(req, res) {
+    return res.sendFile(path.join(__dirname, 'views', 'post_create.html'));
+}
+
+export default { getIndex, getPosts, getPostDetail, getPostCreate };
