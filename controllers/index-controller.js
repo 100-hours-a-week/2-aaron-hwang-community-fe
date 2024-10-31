@@ -20,4 +20,7 @@ function getPostCreate(req, res) {
     return res.sendFile(path.join(__dirname, 'views', 'post_create.html'));
 }
 
-export default { getIndex, getPosts, getPostDetail, getPostCreate };
+function getPostEdit(req, res) {
+    return res.sendFile(path.join(__dirname, 'views', 'post_edit.html'));
+}
+export default { getIndex, getPosts, getPostDetail, getPostCreate, getPostEdit };
