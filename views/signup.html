@@ -9,52 +9,48 @@
 
 <body>
     <header>
+        <div class="backButton-wrapper">
+            <button id="backButton">&lt;</button>
+        </div>
         <h1> KakaoHub </h1>    
+        <div class="header-spacer"></div>
     </header>
     <main>
         <article class = "spacer"></article>
         <article class = "signupForm">
-            <p>회원 가입</p>
+            <p class='form-header'>회원 가입</p>
             <form action = "http://localhost:8000/api/signup"  method="POST">
                 <fieldset class="outerline">
-                    <ul>
-                        <li class="label-li">
-                            <label for="profile_img">프로필 사진</label>
-                        </li>
-                        <li class="profile-img-li">
-                            <div class="profile-img-wrapper">
-                                <img id="profilePreview" src="#" alt="프로필 사진 미리보기" />
-                                <input type="file" id="profile_img" name="profile_img" accept="image/*" required />
-                            </div>
-                        </li>
-                        <li>
-                            <label for="email">이메일*</label>
-                        </li>
-                        <li>
-                            <input type="text" id="email" name="email" placeholder="이메일을 입력해주세요" required></input>
-                        </li>
-                        <li>
-                            <label for="pwd">비밀번호*</label>
-                        </li>
-                        <li>
-                            <input type="password" id="pwd" name="pwd" placeholder="비밀번호를 입력하세요" required></input>
-                        </li>
-                        <li>
-                            <label for="pwd2">비밀번호 확인*</label>
-                        </li>
-                        <li>
-                            <input type="password" id="pwd2" name="pwd2" placeholder="비밀번호를 한번 더 입력하세요" required></input>
-                        </li>
-                        <li>
-                            <label for="username">닉네임*</label>
-                        </li>
-                        <li>
-                            <input type="text" id="username" name="username" placeholder="닉네임을 입력하세요" required></input>
-                        </li>
-                    </ul>
-                    <button type="submit">회원가입</button>          
+                    <div class="profile-wrapper">
+                        <label for="profile_img">프로필 사진</label>
+                        <p id="profile-helper" class="helper-text">&nbsp;</p>
+                        <div class="profile-img-wrapper">
+                            <img id="profilePreview" src="/images/add_profile.jpeg" alt="프로필 사진 미리보기" />
+                            <input type="file" id="profile_img" name="profile_img" accept="image/*" required />
+                        </div>
+                    </div>
+                    <div class="email-wrapper">
+                        <label for="email">이메일*</label>
+                        <input type="text" id="email" name="email" placeholder="이메일을 입력해주세요" required></input>
+                        <p id="email-helper" class="helper-text">&nbsp;</p>
+                    </div>
+                    <div class="password-wrapper">
+                        <label for="pwd">비밀번호*</label>
+                        <input type="password" id="pwd" name="pwd" placeholder="비밀번호를 입력하세요" required></input>
+                        <p id="password-helper" class="helper-text">&nbsp;</p>
+                    </div>
+                    <div class="password2-wrapper">
+                        <label for="pwd2">비밀번호 확인*</label>
+                        <input type="password" id="pwd2" name="pwd2" placeholder="비밀번호를 한번 더 입력하세요" required></input>
+                        <p id="password2-helper" class="helper-text">&nbsp;</p>
+                    </div>
+                    <div class="username-wrapper">
+                        <label for="username">닉네임*</label>
+                        <input type="text" id="username" name="username" placeholder="닉네임을 입력하세요" required></input>
+                        <p id="username-helper" class="helper-text">&nbsp;</p>
+                    </div>
                 </fieldset>
-                
+                <button type="submit">회원가입</button>          
             </form>
             <a href="/">로그인하러 가기</a>
         </article>
