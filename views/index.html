@@ -14,28 +14,23 @@
     <main>
         <article class = "spacer"></article>
         <article id = "article-loginForm" class = "loginForm">
-            <p>로그인</p>
+            <p class="form-header">로그인</p>
             <form id='loginForm'>
-                <fieldset class="outerline">
-                    <ul>
-                        <li>
-                            <label for="email">이메일</label>
-                        </li>
-                        <li>
-                            <input type="text" id="email" name="email" placeholder="이메일을 입력해주세요" required autofocus></input>
-                        </li>
-                        <li>
-                            <label for="pwd">비밀번호</label>
-                        </li>
-                        <li>
-                            <input type="password" id="pwd" name="pwd" placeholder="비밀번호를 입력하세요" required></input>
-                        </li>
-                    </ul>
-                    <button type="submit">로그인</button>          
+            <fieldset class="outerline">
+                    <div class="email-wrapper">
+                        <label for="email">이메일</label>
+                        <input type="text" id="email" name="email" placeholder="이메일을 입력해주세요" required autofocus></input>
+                        <p id="email-helper" class="helper-text"></p>
+                    </div>
+                    <div>
+                        <label for="pwd">비밀번호</label>
+                        <input type="password" id="pwd" name="pwd" placeholder="비밀번호를 입력하세요" required></input>
+                        <p id="password-helper" class="helper-text"></p>
+                    </div>
                 </fieldset>
-                
+                <button type="submit">로그인</button>    
             </form>
-            <a id="signupLink" href="/signup">회원가입</a>
+            <a id="signupLink" href="/auth/signup">회원가입</a>
         </article>
     
     </main>

@@ -7,7 +7,7 @@ body {
 
 header {
     width: 100%;
-    height: 100px;
+    height: 10%;
     display: flex;
     justify-content: center;
     font-size: 25px;
@@ -22,7 +22,7 @@ main {
     width: 100%;
 }
 .spacer {
-    height: 10vh;
+    height: 25vh;
     width: 100%
 }
 
@@ -31,8 +31,8 @@ main {
     padding-bottom: 20px;
 }
 
-.loginForm p {
-    font-size: 25px;
+.loginForm p[class='form-header'] {
+    font-size: 30px;
     font-weight: bold;
 }
 
@@ -44,24 +44,30 @@ fieldset.outerline {
     padding-bottom: 30px;
     margin-bottom: 10px;
 }
-
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.outerline ul li {
+.outerline div {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: center;
     font-weight: bold;
     margin-bottom: 5px;
 }
-
+.outerline div label {
+    width: 100%;
+    text-align: left;
+    margin-top: 20px;;
+    margin-bottom: 10px;
+}
+.helper-text {
+    color: red;
+    font-size: 12px;
+    display: none;
+    width: 100%;
+    text-align: left;
+}
 input[type='text'],
 input[type='password'] {
-    width: calc(100% - 20px);
+    width: 100%;
     padding: 10px;
-    margin-bottom: 10px;
     box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 4px;
