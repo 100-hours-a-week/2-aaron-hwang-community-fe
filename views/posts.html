@@ -15,7 +15,16 @@
             <div class="profile-img">
                 <img src="/images/profile_img.jpg" alt="프로필 이미지">
             </div>
+            <!-- 드롭다운 메뉴 -->
+            <div class="dropdown-menu">
+                <ul>
+                    <li class="user-edit">회원정보 수정</li>
+                    <li class="password-edit">비밀번호 수정</li>
+                    <li class="logout">로그아웃</li>
+                </ul>
+            </div>
         </div>
+
     </header>
 
     <main>
@@ -27,30 +36,33 @@
         </article>
         <article class="posts">
             <!-- 게시글 작성 버튼 -->
-            <button class="post_create" id="post_create" onclick="location='/posts/create/'">게시글 작성</button>
+            <div class="button-wrapper">
+                <button class="post_create" id="post_create" onclick="location='/posts/create/'">게시글 작성</button>
+            </div>
 
             <!-- 게시글 목록 -->
             <section class="post-list" id="post-list">
                 <!-- 게시글 예시 -->
                 <fieldset class="post-outerline">
                     <div class="post-item">
-                        <h3 class="post-title">게시글 제목이 여기에 들어갑니다</h3>
                         <div class="post-header">
+                            게시글 제목이 여기에 들어갑니다
+                        </div>
+                        <div class="post-body">
                             <div class="post-header-wrapper">
-                                <span class="post-likes">👍 0</span>
-                                <span class="post-views">👀 2</span>
-                                <span class="post-reply">💬 3</span>    
+                                <span class="post-likes">좋아요 0</span>
+                                <span class="post-views">댓글 2</span>
+                                <span class="post-reply">조회수 3</span>    
                             </div>
                             <div class="post-header-wrapper">
                                 <span class="post-date">2024-10-31 00:00:00</span>
                             </div>
-                        </div>
-                        <div class="post-footer">
-                            <span class="post-author">🧑‍💻 void</span>
-                            <button class="post-detail-button">자세히 보기</button>
+                        </div>                       
+                    </div>
+                    <div class="post-footer">
+                        <img></img>
+                        <span class="post-author">void</span>
 
-                        </div>
-                        
                     </div>
                 </fieldset>
                 
