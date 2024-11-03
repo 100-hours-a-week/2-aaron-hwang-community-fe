@@ -74,7 +74,7 @@ button:hover {
     color: #fee500
 }
 .post-detail{
-    width: 50%;
+    width: 500px;
 }
 .post-detail-header {
     display: flex;
@@ -126,9 +126,21 @@ button:hover {
     padding-bottom: 10%;
     margin-bottom: 5%;
 }
-
+.footer-div {
+    width:100px;
+    height: 70px;
+    display: flex;
+    background-color: #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #191919;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
 .comment-article{
-    width: 50%;
+    width: 500px;
     display: flex;
     flex-direction: column;
 }
@@ -137,6 +149,7 @@ button:hover {
     border-radius: 5px;
     resize: none;
     margin: 5px;
+    padding: 20px;
 }
 .button-wrapper{
     height: 30px;
