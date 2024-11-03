@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             formHelperText.style.display = "none";
             // TODO: 작성 완료 처리 로직 (API 호출 등)
-            alert("게시글이 작성되었습니다!");
+            alert("게시글이 수정되었습니다!");
         }
     });
 });
