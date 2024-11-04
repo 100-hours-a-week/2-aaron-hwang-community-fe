@@ -7,7 +7,8 @@ const router = express.Router();
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-router.get('/signup', auth.getSignup);
-router.get('/auth/edit/:id', auth.getUserEdit)
+router.get('/auth/signup', auth.getSignup);
+router.get('/auth/edit/:id', auth.getUserEdit);
+router.get('/auth/change-password/:id', auth.getPwdEdit);
 
 export default router;

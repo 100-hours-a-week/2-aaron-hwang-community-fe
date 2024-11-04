@@ -19,7 +19,10 @@ function getSignup(req, res) {
     return res.sendFile(path.join(__dirname, 'views', 'signup.html'));
 }
 function getUserEdit(req, res) {
-    return res.sendFile(path.join(__dirname, 'views', 'signup.html'));
+    return res.sendFile(path.join(__dirname, 'views', 'user_edit.html'));
+}
+function getPwdEdit(req, res) {
+    return res.sendFile(path.join(__dirname, 'views', 'password_edit.html'));
 }
 
 /*
@@ -31,4 +34,4 @@ function signupUser(req, res) {
     });
 }
 */
-export default { getSignup, getUserEdit };
+export default { getSignup, getUserEdit, getPwdEdit };
