@@ -27,13 +27,14 @@ main {
 }
 
 .userEdit-article {
-    text-align: center;
     padding-bottom: 20px;
+    text-align: center;
 }
 
-.userEdit-article p {
+.header-title {
     font-size: 25px;
     font-weight: bold;
+    text-align: center;
 }
 
 fieldset.outerline {
@@ -41,22 +42,19 @@ fieldset.outerline {
     border-radius: 8px;
     border: 1px solid #ccc;
     padding: 10px;
-    padding-bottom: 30px;
     margin-bottom: 10px;
 }
-
-.profile-img-li {
+.profile_wrapper{
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 
 .profile-img-wrapper {
-    position: relative;
     width: 150px; /* 원하는 원형 크기 */
     height: 150px; /* 원하는 원형 크기 */
     border-radius: 50%; /* 원형 만들기 */
     overflow: hidden; /* 원형 밖으로 넘어간 이미지 숨김 */
-    margin-bottom: 15px;
     border: 2px solid #ddd; /* 테두리 추가 */
     cursor: pointer;
 }
@@ -65,36 +63,67 @@ fieldset.outerline {
     width: 100%;
     height: 100%;
     object-fit: cover; /* 이미지가 비율에 맞게 원형 안에 채워지도록 */
-    display: none; /* 기본적으로 미리보기 숨김 */
 }
 
 #profile_img {
     display: none; /* 파일 선택 input 숨김 */
 }
 
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-.profile_wrapper{
-    
-}
-.outerline label {
-    left:0;
+/* 프로필 이미지 변경 텍스트와 효과 */
+.profile-overlay {
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
 }
 
-input[type='text'],
-input[type='password'] {
-    width: calc(100% - 20px);
+.profile-img-wrapper:hover .profile-overlay {
+    display: block;
+}
+.email-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.username-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+/* 헬퍼 텍스트 */
+.helper-text {
+    width: 100%;
+    color: red;
+    font-size: 12px;
+    text-align: left;
+    padding-left: 5px;
+    margin: 0px;
+}
+label {
+    width: 100%;
+    text-align: left;
+    margin: 10px;
+}
+
+input[type='text'] {
+    width: 100%;
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 4px;
     box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
 button[type='submit'] {
-    width: calc(100% - 20px);
+    width: 100%;
     background-color: #fee500;
     color: #191919;
     padding: 10px;
@@ -118,4 +147,57 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+/* 토스트 메시지 */
+.toast {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+.toast :fade-out {
+    display:none;
+}
+/* 모달 */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.modal-content button {
+    width: 40px;
+    margin: 10px;
+    background-color: #ddd;
+    color: #191919;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    padding:3px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.modal-content button:hover {
+    background-color: #6c4102;
+    color: #ffffff;
 }

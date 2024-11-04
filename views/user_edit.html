@@ -13,42 +13,40 @@
     </header>
     <main>
         <article class = "spacer"></article>
-        <article class = "signupForm">
-            <p>회원정보 수정</p>
+        <article class = "userEdit-article">
+            <p class="header-title">회원정보 수정</p>
             <form id="userEditForm">
                 <fieldset class="outerline">
-                    <ul>
-                        <div class="profile_wrapper">
-                            <label for="profile_img">프로필 사진</label>
-                            <div class="profile-img-wrapper">
-                                <img id="profilePreview" src="#" alt="프로필 사진 미리보기" />
-                                <input type="file" id="profile_img" name="profile_img" accept="image/*" required />
-                            </div>
+                    <div class="profile_wrapper">
+                        <label for="profile_img">프로필 사진</label>
+                        <div class="profile-img-wrapper">
+                            <img id="profilePreview" src="#" alt="프로필 사진 미리보기" />
+                            <input type="file" id="profile_img" name="profile_img" accept="image/*"  />
                         </div>
-                        <div class="email-wrapper">
-                            <label for="email">이메일*</label>
-                            <label id="email" name="email"></input>
-                        </div>
-                        <div>
-                            <label for="username">닉네임*</label>
-                            <input type="text" id="username" name="username" placeholder="닉네임을 입력하세요" required></input>
-                            <p id="username-helper" class="helper-text"></p>
-                        </div>
-                    </ul>
-                    <button type="submit">수정하기</button>          
+                    </div>
+                    <div class="email-wrapper">
+                        <label>이메일*</label>
+                        <label id="email" name="email"></input>
+                    </div>
+                    <div class="username-wrapper">
+                        <label for="username">닉네임*</label>
+                        <input type="text" id="username" name="username" placeholder="닉네임을 입력하세요" required></input>
+                        <p id="username-helper" class="helper-text">&nbsp;</p>
+                    </div>          
                 </fieldset>
+                <button type="submit">수정하기</button>
                 
             </form>
             <a id="dropUser">회원 탈퇴</a>
         </article>
     
     </main>
-    <div id="toastMessage" class="toast">수정 완료</div>
-    <div id="modal" class="modal">
+    <!-- 모달 -->
+    <div id="modalOverlay" class="modal-overlay">
         <div class="modal-content">
-            <p>정말로 탈퇴하시겠습니까?</p>
-            <button id="confirmDelete">확인</button>
-            <button id="cancelDelete">취소</button>
+            <p id="modalMessage">모달 메시지</p>
+            <button id="modalCancel">취소</button>
+            <button id="modalConfirm">확인</button>
         </div>
     </div>
     <script src="/javascript/user_edit.js"></script> 
