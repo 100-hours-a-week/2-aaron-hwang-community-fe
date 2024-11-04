@@ -7,7 +7,7 @@ body {
 
 header {
     width: 100%;
-    height: 10%;
+    height: 10vh;
     display: flex;
     justify-content: center;
     font-size: 25px;
@@ -22,7 +22,7 @@ main {
     width: 100%;
 }
 .spacer {
-    height: 25vh;
+    height: 24vh;
     width: 100%
 }
 
@@ -34,6 +34,7 @@ main {
 .loginForm p[class='form-header'] {
     font-size: 30px;
     font-weight: bold;
+    margin-top: 0px;
 }
 
 fieldset.outerline {
