@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const submitButton = document.getElementById("submit-button");
     const titleHelperText = document.getElementById("title-helper");
     const formHelperText = document.getElementById("form-helper");
+    const userEdit = document.querySelector(".user-edit");
+    const passwordEdit = document.querySelector(".password-edit");
+    const logout = document.querySelector(".logout");
     
     backButton.addEventListener("click", () => {
         history.back();
@@ -49,5 +52,21 @@ document.addEventListener("DOMContentLoaded", () => {
             // TODO: 작성 완료 처리 로직 (API 호출 등)
             alert("게시글이 수정되었습니다!");
         }
+    });
+    // 드롭다운 메뉴 리스너
+    // 클릭 이벤트 리스너 추가
+    userEdit.addEventListener("click", () => {
+        // 회원정보 수정 페이지로 이동하는 예제 코드
+        window.location.href = "/auth/edit/1";
+    });
+
+    passwordEdit.addEventListener("click", () => {
+        // 비밀번호 수정 페이지로 이동하는 예제 코드
+        window.location.href = "/auth/change-password/1";
+    });
+
+    logout.addEventListener("click", () => {
+        // 로그아웃 처리 예제 코드 (API 호출 또는 페이지 이동 등)
+        window.location.href = "/auth/logout/";
     });
 });
