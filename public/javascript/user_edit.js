@@ -8,6 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalConfirm = document.getElementById("modalConfirm");
     const modalCancel = document.getElementById("modalCancel");
     const dropUser = document.getElementById("dropUser");
+    const userEdit = document.querySelector(".user-edit");
+    const passwordEdit = document.querySelector(".password-edit");
+    const logout = document.querySelector(".logout");
+    
     const dummpyUser = {
         id: 1,
         email: 'aaron@naver.com',
@@ -18,13 +22,13 @@ document.addEventListener("DOMContentLoaded", () => {
     email.innerText = dummpyUser.email;
     profileImg.setAttribute('src', dummpyUser.profile_img);
     document
-        .querySelector('.profile-img-wrapper')
+        .querySelector('.editor-wrapper')
         .addEventListener('click', function () {
-        document.getElementById('profile_img').click(); // 이미지 클릭 시 파일 선택창 열기
+        document.getElementById('edit_img').click(); // 이미지 클릭 시 파일 선택창 열기
     });
 
     document
-        .getElementById('profile_img')
+        .getElementById('edit_img')
         .addEventListener('change', function (event) {
             const reader = new FileReader();
             reader.onload = function () {
@@ -97,5 +101,20 @@ document.addEventListener("DOMContentLoaded", () => {
     function closeModal() {
         modalOverlay.style.display = "none";
     }
+    // 드롭다운 메뉴 리스너
+    // 클릭 이벤트 리스너 추가
+    userEdit.addEventListener("click", () => {
+        // 회원정보 수정 페이지로 이동하는 예제 코드
+        window.location.href = "/auth/edit/1";
+    });
 
+    passwordEdit.addEventListener("click", () => {
+        // 비밀번호 수정 페이지로 이동하는 예제 코드
+        window.location.href = "/auth/change-password/1";
+    });
+
+    logout.addEventListener("click", () => {
+        // 로그아웃 처리 예제 코드 (API 호출 또는 페이지 이동 등)
+        window.location.href = "/auth/logout/";
+    });
 });

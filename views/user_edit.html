@@ -9,7 +9,22 @@
 
 <body>
     <header>
-        <h1> KakaoHub </h1>    
+        <div class="header-spacer"></div>
+        <a href="/" class="anchor-title"><h1 class="title-home"> KakaoHub </h1></a>
+        <!-- 사용자 프로필 이미지 -->
+        <div class="profile-img-wrapper">
+            <div class="profile-img">
+                <img src="/images/profile_img.jpg" alt="프로필 이미지">
+            </div>
+            <!-- 드롭다운 메뉴 -->
+            <div class="dropdown-menu">
+                <ul>
+                    <li class="user-edit">회원정보 수정</li>
+                    <li class="password-edit">비밀번호 수정</li>
+                    <li class="logout">로그아웃</li>
+                </ul>
+            </div>
+        </div>
     </header>
     <main>
         <article class = "spacer"></article>
@@ -17,11 +32,11 @@
             <p class="header-title">회원정보 수정</p>
             <form id="userEditForm">
                 <fieldset class="outerline">
-                    <div class="profile_wrapper">
-                        <label for="profile_img">프로필 사진</label>
-                        <div class="profile-img-wrapper">
+                    <div class="img_editor_wrapper">
+                        <label for="edit_img">프로필 사진</label>
+                        <div class="editor-wrapper">
                             <img id="profilePreview" src="#" alt="프로필 사진 미리보기" />
-                            <input type="file" id="profile_img" name="profile_img" accept="image/*"  />
+                            <input type="file" id="edit_img" name="edit_img" accept="image/*"  />
                         </div>
                     </div>
                     <div class="email-wrapper">
