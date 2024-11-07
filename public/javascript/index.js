@@ -63,23 +63,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
     emailInput.addEventListener("input", validateForm);
     passwordInput.addEventListener("input", validateForm);
+
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById("email").value;
+        const pwd = document.getElementById("pwd").value;
+    
+        try{
+            fetch("/data/users.json")
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                const user = data.users.find((user) => user.email === email && user.password === pwd);
+                
+                if (user){
+                    console.log(user);
+                    alert("로그인에 성공했습니다")
+                    //window.location = "/posts"
+                }
+                else{
+                    console.log('로그인 실패');
+                }
+            });
+        }catch(error){
+            console.error("login Error: ",error);
+        }
+        
+    })
     
 });
 
-loginForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const email = document.getElementById("email").value;
-    const pwd = document.getElementById("pwd").value;
 
-    fetch("https://localhost:8000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({email,pwd}),
-    })
-    .then((response) => console.log(response.json()))
-    .then((data) => console.log('data: ',data))
-})
 
