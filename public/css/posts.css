@@ -11,8 +11,13 @@ header {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    font-size: 25px;
     border-bottom: 1px solid #191919;
+}
+.anchor-title {
+    text-decoration: none !important;
+}
+.title-home {
+    font-size: 35px;
 }
 .header-spacer {
     width: 10%;

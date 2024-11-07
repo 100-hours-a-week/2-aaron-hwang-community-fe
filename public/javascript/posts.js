@@ -77,8 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="post-body">
                     <div class="post-header-wrapper">
                         <span class="post-likes">좋아요 ${post.likes >= 1000 ? (post.likes / 1000).toFixed(1) + 'k' : post.likes}</span>
-                        <span class="post-views">댓글 ${post.comments >= 1000 ? (post.likes / 1000).toFixed(1) + 'k' : post.likes}</span>
-                        <span class="post-reply">조회수 ${post.views >= 1000 ? (post.likes / 1000).toFixed(1) + 'k' : post.likes}</span>    
+                        <span class="post-views">댓글 ${post.comments >= 1000 ? (post.likes / 1000).toFixed(1) + 'k' : post.comments}</span>
+                        <span class="post-reply">조회수 ${post.views >= 1000 ? (post.views / 1000).toFixed(1) + 'k' : post.views}</span>    
                     </div>
                     <div class="post-header-wrapper">
                         <span class="post-date">${post.createdAt}</span>
@@ -105,12 +105,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     passwordEdit.addEventListener("click", () => {
         // 비밀번호 수정 페이지로 이동하는 예제 코드
-        window.location.href = "/change-password";
+        window.location.href = "/auth/change-password/1";
     });
 
     logout.addEventListener("click", () => {
         // 로그아웃 처리 예제 코드 (API 호출 또는 페이지 이동 등)
-        window.location.href = "/logout";
+        window.location.href = "/auth/logout/";
     });
 });
 /*
