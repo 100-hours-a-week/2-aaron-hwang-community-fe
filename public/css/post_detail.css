@@ -212,8 +212,6 @@ button:hover {
 .comment-header {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
 }
 .comment-info {
     display: flex;
@@ -234,6 +232,8 @@ button:hover {
 }
 .comment-content {
     padding-top: 10px;
+    padding-left: 40px;
+    text-align: left;
 }
 
 .modal-overlay {
