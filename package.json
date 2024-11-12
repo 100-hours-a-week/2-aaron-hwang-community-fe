@@ -16,6 +16,7 @@
     "@eslint/eslintrc": "^3.1.0",
     "body-parser": "^1.20.3",
     "connect-timeout": "^1.9.0",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.5",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-prettier": "^5.2.1",

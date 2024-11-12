@@ -68,19 +68,26 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         
         const email = document.getElementById("email").value;
-        const pwd = document.getElementById("pwd").value;
+        const password = document.getElementById("pwd").value;
     
         try{
-            fetch("/data/users.json")
+            fetch('http://localhost:8000/api/auth/login', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({email, password}),
+            })
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
-                const user = data.users.find((user) => user.email === email && user.password === pwd);
+                const user_id = data.data.user_id;
                 
-                if (user){
-                    console.log(user);
+                if (user_id){
+                    console.log(user_id);
                     alert("로그인에 성공했습니다")
-                    //window.location = "/posts"
+                    window.location = "/posts"
                 }
                 else{
                     console.log('로그인 실패');

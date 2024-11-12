@@ -15,5 +15,6 @@ router.get('/posts', index.getPosts);
 router.get('/posts/edit/:id', index.getPostEdit);
 router.get('/posts/create', index.getPostCreate);
 router.get('/posts/:id', index.getPostDetail);
+// TODO: 컨트롤러 없애기
 
 export default router;
