@@ -8,20 +8,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const userEdit = document.querySelector(".user-edit");
     const passwordEdit = document.querySelector(".password-edit");
     const logout = document.querySelector(".logout");
-
     const postsContainer = document.getElementById('post-list');
-    fetch("/data/posts.json")
+
+    // 현재 사용자 프로필 사진 요청
+    fetch('http://localhost:8000/api/auth/users', {
+        method: 'GET',
+        credentials: 'include'  // 세션 쿠키를 포함하여 전송
+    })
+    .then(response => response.json())
+    .then(data => {
+            console.log(data);
+            const userProfileImage = document.querySelector('.profile-img > img');
+            userProfileImage.src = data.data.profile_img; // 프로필 이미지 설정
+            userProfileImage.alt = data.data.username; // 사용자 이름
+    })
+    .catch(error => {
+            console.error('사용자 정보 조회 실패:', error);
+        // 로그인이 필요한 경우 로그인 페이지로 리디렉션 가능
+    });
+
+    fetch('http://localhost:8000/api/posts', {
+        method: 'GET'
+    })
     .then((response) => response.json())
     .then((data) => {
-        console.log(data)
-        data.forEach(post => {
-            console.log(post)
-            
-
-            fetch("/data/users.json")
+        data.data.forEach(post => {
+            fetch(`http://localhost:8000/api/posts/author/${post.author_id}`)
             .then((response) => response.json())
             .then((data) => {
-                const author = data.users.find((author) => author.id === post.author_id)
+                const author = data.data
                 
                 const postElement = document.createElement('fieldset');
                 postElement.className = `post-outerline`;
@@ -49,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     </div>
                 `;
-                console.log(postElement.innerHTML);
                 postElement.addEventListener('click', () => {
                     window.location.href = `/posts/${post.id}`;
                 });
