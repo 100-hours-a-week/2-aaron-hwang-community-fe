@@ -14,53 +14,70 @@ document.addEventListener('DOMContentLoaded', () => {
     const logout = document.querySelector('.logout');
     const commentsContainer = document.getElementById('comment-list');
 
-    Promise.all([
-        fetch("/data/posts.json").then(response => response.json()),
-        fetch("/data/users.json").then(response => response.json()),
-        fetch("/data/comments.json").then(response => response.json())
-    ]).then(([postsData, usersData, commentsData]) => {
-        const post = postsData.posts.find(p => p.id == postId);
-        const author = usersData.users.find(a => a.id === post.author_id);
+    fetch(`http://localhost:8000/api/posts/${postId}`, {
+        method: 'GET',
+        credentials: 'include'
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        const post = data.data
+        fetch(`http://localhost:8000/api/posts/author/${post.author_id}`)
+        .then((response) => response.json())
+        .then((data) => {
+            const author = data.data
 
-        // 포스트 관련 정보 표시
-        document.querySelector('.post-detail h2').textContent = post.title;
-        document.querySelector('.author-img img').src = author.profile_img;
-        document.querySelector('.post-author').textContent = author.username;
-        document.querySelector('.post-date').textContent = post.createdAt;
-        document.querySelector('.post-content').innerHTML = `<p>${post.content}</p>`;
-        document.querySelector('.post-content-img').src = post.image;
-        document.querySelector('#likes-wrapper').innerHTML = `${post.likes >= 1000 ? (post.likes / 1000).toFixed(1) + 'k' : post.likes}<br>좋아요수`;
-        document.querySelector('#views-wrapper').innerHTML = `${post.views >= 1000 ? (post.views / 1000).toFixed(1) + 'k' : post.views}<br>조회수`;
-        document.querySelector('#comments-wrapper').innerHTML = `${post.comments >= 1000 ? (post.comments / 1000).toFixed(1) + 'k' : post.comments}<br>댓글 수`;
+            document.querySelector('.post-detail h2').textContent = post.title;
+            document.querySelector('.author-img img').src = author.profile_img;
+            document.querySelector('.post-author').textContent = author.username;
+            document.querySelector('.post-date').textContent = post.createdAt;
+            document.querySelector('.post-content').innerHTML = `<p>${post.content}</p>`;
+            document.querySelector('.post-content-img').src = post.image;
+            document.querySelector('#likes-wrapper').innerHTML = `${post.likes >= 1000 ? (post.likes / 1000).toFixed(1) + 'k' : post.likes}<br>좋아요수`;
+            document.querySelector('#views-wrapper').innerHTML = `${post.views >= 1000 ? (post.views / 1000).toFixed(1) + 'k' : post.views}<br>조회수`;
+            document.querySelector('#comments-wrapper').innerHTML = `${post.comments >= 1000 ? (post.comments / 1000).toFixed(1) + 'k' : post.comments}<br>댓글 수`;
 
-        const commentList = commentsData.comments.filter(c => c.post_id == postId);
-        commentList.forEach(comment => {
-            const commentAuthor = data.users.find(u => u.id == comment.author_id);
-
-            const commentElement = document.createElement('div');
-            commentElement.className = `comment-item`;
-            commentElement.innerHTML = `
-                <div class='comment-header'>
-                    <div class="post-info">
-                        <div class="comment-author-img">
-                            <img src="${commentAuthor.profile_img}" alt="프로필 이미지">
-                        </div>
-                        <span class="comment-author">${commentAuthor.username}</span>
-                        <span class="comment-date">${element.createdAt}</span>
-                    </div>
-                    <span id= "comment-content" class="comment-content">${element.content}</span>
-                </div>
-                <div class="post-detail-button-wrapper">
-                    <button id="editComment" class="editComment">수정</button>
-                    <button id="deleteComment" class="deleteComment">삭제</button>
-                </div>
-            `;
-            commentsContainer.appendChild(commentElement);
         })
     })
+    fetch(`http://localhost:8000/api/posts/${postId}/comments`, {
+        method: 'GET',
+        credentials: 'include'
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        const commentList = data.data;
+        commentList.forEach(comment => {
+            
+            fetch(`http://localhost:8000/api/comments/${comment.author_id}/author`, {
+                method: 'GET',
+                credentials: 'include'
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                const commentAuthor = data.data
+                const commentElement = document.createElement('div');
+                commentElement.className = `comment-item`;
+                commentElement.innerHTML = `
+                    <div class='comment-header'>
+                        <div class="post-info">
+                            <div class="comment-author-img">
+                                <img src="${commentAuthor.profile_img}" alt="프로필 이미지">
+                            </div>
+                            <span class="comment-author">${commentAuthor.username}</span>
+                            <span class="comment-date">${comment.createdAt}</span>
+                        </div>
+                        <span id= "comment-content" class="comment-content">${comment.content}</span>
+                    </div>
+                    <div class="post-detail-button-wrapper">
+                        <button id="editComment" class="editComment">수정</button>
+                        <button id="deleteComment" class="deleteComment">삭제</button>
+                    </div>
+                `;
+                commentsContainer.appendChild(commentElement);
     
+            })
+        })
+    })
 
-                        
 
     const editComment = document.getElementById('editComment');
     const deleteComment = document.getElementById('deleteComment');
