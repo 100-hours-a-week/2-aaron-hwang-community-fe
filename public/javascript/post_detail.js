@@ -25,17 +25,23 @@ document.addEventListener('DOMContentLoaded', () => {
         .then((response) => response.json())
         .then((data) => {
             const author = data.data
-
-            document.querySelector('.post-detail h2').textContent = post.title;
-            document.querySelector('.author-img img').src = author.profile_img;
-            document.querySelector('.post-author').textContent = author.username;
-            document.querySelector('.post-date').textContent = post.createdAt;
-            document.querySelector('.post-content').innerHTML = `<p>${post.content}</p>`;
-            document.querySelector('.post-content-img').src = post.image;
-            document.querySelector('#likes-wrapper').innerHTML = `${post.likes >= 1000 ? (post.likes / 1000).toFixed(1) + 'k' : post.likes}<br>좋아요수`;
-            document.querySelector('#views-wrapper').innerHTML = `${post.views >= 1000 ? (post.views / 1000).toFixed(1) + 'k' : post.views}<br>조회수`;
-            document.querySelector('#comments-wrapper').innerHTML = `${post.comments >= 1000 ? (post.comments / 1000).toFixed(1) + 'k' : post.comments}<br>댓글 수`;
-
+            fetch(`http://localhost:8000/api/posts/${postId}/likes`, {
+                method: 'GET',
+                credentials: 'include'
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                const likes = data.data
+                document.querySelector('.post-detail h2').textContent = post.title;
+                document.querySelector('.author-img img').src = author.profile_img;
+                document.querySelector('.post-author').textContent = author.username;
+                document.querySelector('.post-date').textContent = post.createdAt;
+                document.querySelector('.post-content').innerHTML = `<p>${post.content}</p>`;
+                document.querySelector('.post-content-img').src = post.image;
+                document.querySelector('#likes-wrapper').innerHTML = `${likes.length >= 1000 ? (likes.length / 1000).toFixed(1) + 'k' : likes.length}<br>좋아요수`;
+                document.querySelector('#views-wrapper').innerHTML = `${post.views >= 1000 ? (post.views / 1000).toFixed(1) + 'k' : post.views}<br>조회수`;
+                document.querySelector('#comments-wrapper').innerHTML = `${post.comments >= 1000 ? (post.comments / 1000).toFixed(1) + 'k' : post.comments}<br>댓글 수`;
+            })
         })
     })
     fetch(`http://localhost:8000/api/posts/${postId}/comments`, {

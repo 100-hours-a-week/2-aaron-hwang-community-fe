@@ -33,42 +33,51 @@ document.addEventListener('DOMContentLoaded', () => {
     .then((response) => response.json())
     .then((data) => {
         data.data.forEach(post => {
-            fetch(`http://localhost:8000/api/posts/author/${post.author_id}`)
+            fetch(`http://localhost:8000/api/posts/${post.author_id}/likes`,{
+                method: 'GET',
+                credentials: 'include'  // 세션 쿠키를 포함하여 전송
+            })
             .then((response) => response.json())
             .then((data) => {
-                const author = data.data
+                const likes = data.data.length
                 
-                const postElement = document.createElement('fieldset');
-                postElement.className = `post-outerline`;
+                fetch(`http://localhost:8000/api/posts/author/${post.author_id}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    const author = data.data
+                    console.log('likes', likes)
+                    const postElement = document.createElement('fieldset');
+                    postElement.className = `post-outerline`;
 
-                // 게시글 제목, 날짜, 작성자 등 표시
-                postElement.innerHTML = `
-                    <div class="post-item">
-                        <div class="post-header">
-                            ${post.title.length > 26 ? post.title.slice(0, 26) + "..." : post.title}
+                    // 게시글 제목, 날짜, 작성자 등 표시
+                    postElement.innerHTML = `
+                        <div class="post-item">
+                            <div class="post-header">
+                                ${post.title.length > 26 ? post.title.slice(0, 26) + "..." : post.title}
+                            </div>
+                            <div class="post-body">
+                                <div class="post-header-wrapper">
+                                    <span class="post-likes">좋아요 ${likes >= 1000 ? (likes / 1000).toFixed(1) + 'k' : likes}</span>
+                                    <span class="post-views">댓글 ${post.comments >= 1000 ? (post.comments / 1000).toFixed(1) + 'k' : post.comments}</span>
+                                    <span class="post-reply">조회수 ${post.views >= 1000 ? (post.views / 1000).toFixed(1) + 'k' : post.views}</span>    
+                                </div>
+                                <div class="post-header-wrapper">
+                                    <span class="post-date">${post.createdAt}</span>
+                                </div>
+                            </div>                       
                         </div>
-                        <div class="post-body">
-                            <div class="post-header-wrapper">
-                                <span class="post-likes">좋아요 ${post.likes >= 1000 ? (post.likes / 1000).toFixed(1) + 'k' : post.likes}</span>
-                                <span class="post-views">댓글 ${post.comments >= 1000 ? (post.likes / 1000).toFixed(1) + 'k' : post.comments}</span>
-                                <span class="post-reply">조회수 ${post.views >= 1000 ? (post.views / 1000).toFixed(1) + 'k' : post.views}</span>    
-                            </div>
-                            <div class="post-header-wrapper">
-                                <span class="post-date">${post.createdAt}</span>
-                            </div>
-                        </div>                       
-                    </div>
-                    <div class="post-footer">
-                        <img src="${author.profile_img}"></img>
-                        <span class="post-author">${author.username}</span>
+                        <div class="post-footer">
+                            <img src="${author.profile_img}"></img>
+                            <span class="post-author">${author.username}</span>
 
-                    </div>
-                `;
-                postElement.addEventListener('click', () => {
-                    window.location.href = `/posts/${post.id}`;
-                });
+                        </div>
+                    `;
+                    postElement.addEventListener('click', () => {
+                        window.location.href = `/posts/${post.id}`;
+                    });
 
-                postsContainer.appendChild(postElement);
+                    postsContainer.appendChild(postElement);
+                    })
                 })
 
             })
