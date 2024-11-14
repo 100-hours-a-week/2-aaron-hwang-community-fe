@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(data);
             const userProfileImage = document.querySelector('.profile-img > img');
             userProfileImage.src = data.data.profile_img; // 프로필 이미지 설정
-            userProfileImage.alt = data.data.username; // 사용자 이름
+            userProfileImage.alt = data.data.email; // 사용자 이메일
     })
     .catch(error => {
             console.error('사용자 정보 조회 실패:', error);
