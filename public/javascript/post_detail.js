@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(response => response.json())
     .then(data => {
-            console.log(data);
             sessionUserId = data.data.id;
             const userProfileImage = document.querySelector('.profile-img > img');
             userProfileImage.src = data.data.profile_img; // 프로필 이미지 설정
@@ -39,83 +38,60 @@ document.addEventListener('DOMContentLoaded', () => {
     .then((response) => response.json())
     .then((data) => {
         const post = data.data
-        fetch(`http://localhost:8000/api/posts/author/${post.author_id}`)
-        .then((response) => response.json())
-        .then((data) => {
-            const author = data.data
-            fetch(`http://localhost:8000/api/posts/${postId}/likes`, {
+        const author = post.author_id
+        const commentList = post.comments
+        const likes = post.likes
+
+        document.querySelector('.post-detail h2').textContent = post.title;
+        document.querySelector('.author-img img').src = author.profile_img;
+        document.querySelector('.post-author').textContent = author.username;
+        document.querySelector('.post-date').textContent = post.createdAt;
+        document.querySelector('.post-content').innerHTML = `<p>${post.content}</p>`;
+        document.querySelector('.post-content-img').src = post.image;
+        document.querySelector('#likes-wrapper').innerHTML = `${likes.length >= 1000 ? (likes.length / 1000).toFixed(1) + 'k' : likes.length}<br>좋아요수`;
+        document.querySelector('#views-wrapper').innerHTML = `${post.views >= 1000 ? (post.views / 1000).toFixed(1) + 'k' : post.views}<br>조회수`;
+        document.querySelector('#comments-wrapper').innerHTML = `${commentList.length >= 1000 ? (commentList.length / 1000).toFixed(1) + 'k' : commentList.length}<br>댓글 수`;
+    
+        commentList.forEach(comment => {
+            
+            fetch(`http://localhost:8000/api/auth/users/${comment.author_id}`, {
                 method: 'GET',
-                credentials: 'include'
             })
             .then((response) => response.json())
             .then((data) => {
-                const likes = data.data
-                document.querySelector('.post-detail h2').textContent = post.title;
-                document.querySelector('.author-img img').src = author.profile_img;
-                document.querySelector('.post-author').textContent = author.username;
-                document.querySelector('.post-date').textContent = post.createdAt;
-                document.querySelector('.post-content').innerHTML = `<p>${post.content}</p>`;
-                document.querySelector('.post-content-img').src = post.image;
-                document.querySelector('#likes-wrapper').innerHTML = `${likes.length >= 1000 ? (likes.length / 1000).toFixed(1) + 'k' : likes.length}<br>좋아요수`;
-                document.querySelector('#views-wrapper').innerHTML = `${post.views >= 1000 ? (post.views / 1000).toFixed(1) + 'k' : post.views}<br>조회수`;
-                document.querySelector('#comments-wrapper').innerHTML = `${post.comments >= 1000 ? (post.comments / 1000).toFixed(1) + 'k' : post.comments}<br>댓글 수`;
-            
-        
+                const commentAuthor = data.data
+                const commentElement = document.createElement('div');
+                commentElement.className = `comment-item`;
+                commentElement.innerHTML = `
+                    <div class='comment-header'>
+                        <div class="post-info">
+                            <div class="comment-author-img">
+                                <img src="${commentAuthor.profile_img}" alt="프로필 이미지">
+                            </div>
+                            <span class="comment-author">${commentAuthor.username}</span>
+                            <span class="comment-date">${comment.createdAt}</span>
+                        </div>
+                        <span id= "comment-content" class="comment-content">${comment.content}</span>
+                    </div>
+                    
+                `;
+                if (data.data.author_id == sessionUserId) {
+                    commentElement.innerHTML += `
+                    <div class="post-detail-button-wrapper">
+                        <button id="editComment" class="editComment">수정</button>
+                        <button id="deleteComment" class="deleteComment">삭제</button>
+                    </div>`
+                }
+                commentsContainer.appendChild(commentElement);
     
-                fetch(`http://localhost:8000/api/posts/${postId}/comments`, {
-                    method: 'GET',
-                    credentials: 'include'
-                })
-                .then((response) => response.json())
-                .then((data) => {
-                    const commentList = data.data;
-                    commentList.forEach(comment => {
-                        
-                        fetch(`http://localhost:8000/api/comments/${comment.author_id}/author`, {
-                            method: 'GET',
-                            credentials: 'include'
-                        })
-                        .then((response) => response.json())
-                        .then((data) => {
-                            const commentAuthor = data.data
-                            console.log(commentAuthor.author_id)
-                            const commentElement = document.createElement('div');
-                            commentElement.className = `comment-item`;
-                            commentElement.innerHTML = `
-                                <div class='comment-header'>
-                                    <div class="post-info">
-                                        <div class="comment-author-img">
-                                            <img src="${commentAuthor.profile_img}" alt="프로필 이미지">
-                                        </div>
-                                        <span class="comment-author">${commentAuthor.username}</span>
-                                        <span class="comment-date">${comment.createdAt}</span>
-                                    </div>
-                                    <span id= "comment-content" class="comment-content">${comment.content}</span>
-                                </div>
-                                
-                            `;
-                            console.log(commentAuthor.author_id, sessionUserId)
-                            if (data.data.author_id == sessionUserId) {
-                                commentElement.innerHTML += `
-                                <div class="post-detail-button-wrapper">
-                                    <button id="editComment" class="editComment">수정</button>
-                                    <button id="deleteComment" class="deleteComment">삭제</button>
-                                </div>`
-                            }
-                            commentsContainer.appendChild(commentElement);
-                
-                        })
-                        const editComment = document.getElementById('editComment');
-                        const deleteComment = document.getElementById('deleteComment');
-                        
-                    })
-                })
             })
+            const editComment = document.getElementById('editComment');
+            const deleteComment = document.getElementById('deleteComment');
+            
         })
     })
 
     commentsContainer.addEventListener('click', event => {
-        console.log(event.target.classList.contains('editComment'));
         if (event.target.classList.contains('editComment')) {
             const commentText = event.target.closest('.comment-item').querySelector('#comment-content').innerText;
             commentInput.value = commentText;
