@@ -92,8 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     commentsContainer.addEventListener('click', event => {
+        const context = event.target.closest('.comment-item');
         if (event.target.classList.contains('editComment')) {
-            const context = event.target.closest('.comment-item');
             const commentText = context.querySelector('#comment-content').innerText;
             commentInput.value = commentText;
             submitComment.innerText = '댓글 수정';
@@ -106,7 +106,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (event.target.classList.contains('deleteComment')) {
             showModal('댓글을 삭제하시겠습니까?', () => {
-                // TODO: 댓글 삭제 구현
+                fetch(`http://localhost:8000/api/comments/${context.getAttribute('alt')}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = `/posts/${postId}`; // 삭제 후 리디렉션
+                    } else {
+                        response.json().then(data => {
+                            alert(data.message || '댓글 삭제에 실패했습니다.');
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('요청 처리 중 오류가 발생했습니다.');
+                });
                 alert('댓글이 삭제되었습니다.');
             });
         }
@@ -164,10 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: new URLSearchParams({commentContent}),
                 });
             }
-            else{
-                
-            }
-
             if (response.ok) {
                 const result = await response.json();
                 alert(result.message || `${flag} 되었습니다!`);
