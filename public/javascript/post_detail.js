@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fetch('http://localhost:8000/api/auth/users', {
         method: 'GET',
-        //credentials: 'include'  // 세션 쿠키를 포함하여 전송
+        credentials: 'include'  // 세션 쿠키를 포함하여 전송
     })
     .then(response => response.json())
     .then(data => {
@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const commentAuthor = data.data
                 const commentElement = document.createElement('div');
                 commentElement.className = `comment-item`;
+                commentElement.setAttribute("alt", comment.id );
                 commentElement.innerHTML = `
                     <div class='comment-header'>
                         <div class="post-info">
@@ -92,9 +93,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     commentsContainer.addEventListener('click', event => {
         if (event.target.classList.contains('editComment')) {
-            const commentText = event.target.closest('.comment-item').querySelector('#comment-content').innerText;
+            const context = event.target.closest('.comment-item');
+            const commentText = context.querySelector('#comment-content').innerText;
             commentInput.value = commentText;
             submitComment.innerText = '댓글 수정';
+            submitComment.disabled = false;
+            submitComment.style.backgroundColor = '#fee500';
+            submitComment.style.border = 'none';
+
+            submitComment.setAttribute('alt', context.getAttribute('alt'));
         }
 
         if (event.target.classList.contains('deleteComment')) {
@@ -132,6 +139,46 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             submitComment.disabled = true;
             submitComment.style.backgroundColor = '#ddd';
+        }
+    });
+    
+    submitComment.addEventListener('click', async () => {
+        try{
+            const commentContent = commentInput.value;
+            const flag = submitComment.innerText;
+            let response;
+
+            if (flag === '댓글 작성'){
+                response = await fetch(`http://127.0.0.1:8000/api/comments/${postId}`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    body: new URLSearchParams({commentContent}),
+                });
+            }
+            else if (flag === '댓글 수정'){
+                console.log("asdasd ")
+                const commentId = submitComment.getAttribute('alt')
+                response = await fetch(`http://127.0.0.1:8000/api/comments/${commentId}`, {
+                    method: 'PATCH',
+                    //credentials: 'include',
+                    body: new URLSearchParams({commentContent}),
+                });
+            }
+            else{
+                
+            }
+
+            if (response.ok) {
+                const result = await response.json();
+                alert(result.message || `${flag} 되었습니다!`);
+                window.location = `/posts/${postId}`
+            } else {
+                const error = await response.json();
+                alert(error.message || `${flag} 실패했습니다!`);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("요청 처리 중 오류가 발생했습니다.");
         }
     });
 
