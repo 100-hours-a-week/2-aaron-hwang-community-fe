@@ -1,12 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const updateForm = document.getElementById("updateForm");
     const titleInput = document.getElementById("title");
     const contentInput = document.getElementById("content");
+    const imageInput = document.getElementById("file");
     const submitButton = document.getElementById("submit-button");
     const titleHelperText = document.getElementById("title-helper");
     const formHelperText = document.getElementById("form-helper");
     const userEdit = document.querySelector(".user-edit");
     const passwordEdit = document.querySelector(".password-edit");
     const logout = document.querySelector(".logout");
+    const postId = window.location.pathname.split('/').pop();
     
     backButton.addEventListener("click", () => {
         history.back();
@@ -43,14 +46,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 완료 버튼 클릭 핸들러
-    submitButton.addEventListener("click", () => {
+    updateForm.addEventListener("submit", async (event) => {
+        event.preventDefault(); 
         if (!titleInput.value || !contentInput.value) {
             formHelperText.style.display = "block";
             formHelperText.textContent = "제목과 본문을 모두 입력해주세요.";
         } else {
             formHelperText.style.display = "none";
             // TODO: 작성 완료 처리 로직 (API 호출 등)
-            alert("게시글이 수정되었습니다!");
+            const title = titleInput.value;
+            const content = contentInput.value;
+            const image = imageInput.value; // 이미지 파일 추가
+
+            try {
+                const response = await fetch(`http://localhost:8000/api/posts/${postId}`, {
+                    method: "PATCH",
+                    body: new URLSearchParams({title, content, image}),
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(result.message || "게시글이 수정되었습니다!");
+                    window.location = "/posts"
+                } else {
+                    const error = await response.json();
+                    alert(error.message || "게시글 수정에 실패했습니다.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("요청 처리 중 오류가 발생했습니다.");
+            }
         }
     });
     // 드롭다운 메뉴 리스너
