@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fetch('http://localhost:8000/api/auth/users', {
         method: 'GET',
-        credentials: 'include'  // 세션 쿠키를 포함하여 전송
+        //credentials: 'include'  // 세션 쿠키를 포함하여 전송
     })
     .then(response => response.json())
     .then(data => {
@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fetch(`http://localhost:8000/api/posts/${postId}`, {
         method: 'GET',
-        credentials: 'include'
     })
     .then((response) => response.json())
     .then((data) => {
@@ -119,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 게시글 삭제 버튼
     deletePost.addEventListener('click', () => {
         showModal('게시글을 삭제하시겠습니까?', () => {
-            // TODO: 게시글 삭제 로직 실행 (백엔드와 연동)
+            deletePosts(postId);
             alert('게시글이 삭제되었습니다.');
         });
     });
@@ -167,4 +166,30 @@ document.addEventListener('DOMContentLoaded', () => {
     function closeModal() {
         modalOverlay.style.display = 'none';
     }
+    // 게시글 삭제 함수
+    function deletePosts() {
+        fetch(`http://localhost:8000/api/posts/${postId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = '/posts'; // 삭제 후 리디렉션
+            } else {
+                response.json().then(data => {
+                    alert(data.message || '게시글 삭제에 실패했습니다.');
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('요청 처리 중 오류가 발생했습니다.');
+        });
+    }
+    // 모달을 통해 게시글 삭제 실행
+    document.getElementById('deletePostButton').addEventListener('click', () => {
+        showModal('정말로 이 게시글을 삭제하시겠습니까?');
+    });
 });

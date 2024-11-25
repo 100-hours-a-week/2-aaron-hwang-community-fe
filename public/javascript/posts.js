@@ -32,11 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
     .then((response) => response.json())
     .then((data) => {
         data.data.forEach(post => {
-            const author = post.author;
             
             const postElement = document.createElement('fieldset');
             postElement.className = `post-outerline`;
-
+            console.log(post)
             // 게시글 제목, 날짜, 작성자 등 표시
             postElement.innerHTML = `
                 <div class="post-item">
@@ -55,8 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>                       
                 </div>
                 <div class="post-footer">
-                    <img src="${post.author_id.profile_img}"></img>
-                    <span class="post-author">${post.author_id.username}</span>
+                    <img src="${post.author.profile_img}"></img>
+                    <span class="post-author">${post.author.username}</span>
 
                 </div>
             `;
@@ -94,24 +93,8 @@ async function loadMorePosts() {
 
     const postList = document.querySelector('.post-list');
     posts.forEach(post => {
-        const postItem = document.createElement('div');
-        postItem.classList.add('post-item');
-
-        const title = document.createElement('h3');
-        title.classList.add('post-title');
-        title.textContent = post.title.length > 26 ? post.title.slice(0, 26) + '...' : post.title;
-
-        const info = document.createElement('div');
-        info.classList.add('post-info');
-        info.innerHTML = `
-            <span class="post-author">${post.author}</span>
-            <span class="post-date">${formatDate(post.date)}</span>
-            <span class="post-stats">♥ ${formatStats(post.likes)} · 💬 ${formatStats(post.comments)} · 👁 ${formatStats(post.views)}</span>
-        `;
-
-        postItem.appendChild(title);
-        postItem.appendChild(info);
-        postList.appendChild(postItem);
+        
+        
     });
 }
     
