@@ -134,6 +134,42 @@ document.addEventListener('DOMContentLoaded', () => {
             submitComment.style.backgroundColor = '#ddd';
         }
     });
+    
+    submitComment.addEventListener('click', async () => {
+        try{
+            const commentContent = commentInput.value;
+            const flag = submitComment.innerText;
+            let response;
+
+            if (flag === '댓글 등록'){
+                response = await fetch(`http://127.0.0.1:8000/api/comments/${postId}`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    body: new URLSearchParams({commentContent}),
+                });
+            }
+            else if (flag === '댓글 수정'){
+                console.log("asdasd ")
+                const commentId = submitComment.getAttribute('alt')
+                response = await fetch(`http://127.0.0.1:8000/api/comments/${commentId}`, {
+                    method: 'PATCH',
+                    //credentials: 'include',
+                    body: new URLSearchParams({commentContent}),
+                });
+            }
+            if (response.ok) {
+                const result = await response.json();
+                alert(result.message || `${flag} 되었습니다!`);
+                window.location = `/posts/${postId}`
+            } else {
+                const error = await response.json();
+                alert(error.message || `${flag} 실패했습니다!`);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("요청 처리 중 오류가 발생했습니다.");
+        }
+    });
 
     // 드롭다운 메뉴 리스너
     // 클릭 이벤트 리스너 추가
