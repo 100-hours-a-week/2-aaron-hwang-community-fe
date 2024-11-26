@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fetch('http://localhost:8000/api/auth/users', {
         method: 'GET',
-        //credentials: 'include'  // 세션 쿠키를 포함하여 전송
+        credentials: 'include'  // 세션 쿠키를 포함하여 전송
     })
     .then(response => response.json())
     .then(data => {
@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const commentAuthor = data.data
                 const commentElement = document.createElement('div');
                 commentElement.className = `comment-item`;
+                commentElement.setAttribute("alt", comment.id );
                 commentElement.innerHTML = `
                     <div class='comment-header'>
                         <div class="post-info">
@@ -91,15 +92,39 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     commentsContainer.addEventListener('click', event => {
+        const context = event.target.closest('.comment-item');
         if (event.target.classList.contains('editComment')) {
-            const commentText = event.target.closest('.comment-item').querySelector('#comment-content').innerText;
+            const commentText = context.querySelector('#comment-content').innerText;
             commentInput.value = commentText;
             submitComment.innerText = '댓글 수정';
+            submitComment.disabled = false;
+            submitComment.style.backgroundColor = '#fee500';
+            submitComment.style.border = 'none';
+
+            submitComment.setAttribute('alt', context.getAttribute('alt'));
         }
 
         if (event.target.classList.contains('deleteComment')) {
             showModal('댓글을 삭제하시겠습니까?', () => {
-                // TODO: 댓글 삭제 구현
+                fetch(`http://localhost:8000/api/comments/${context.getAttribute('alt')}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = `/posts/${postId}`; // 삭제 후 리디렉션
+                    } else {
+                        response.json().then(data => {
+                            alert(data.message || '댓글 삭제에 실패했습니다.');
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('요청 처리 중 오류가 발생했습니다.');
+                });
                 alert('댓글이 삭제되었습니다.');
             });
         }
