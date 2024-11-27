@@ -13,7 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordEdit = document.querySelector('.password-edit');
     const logout = document.querySelector('.logout');
     const commentsContainer = document.getElementById('comment-list');
-    let sessionUserId;
+    const likeButton = document.getElementById('likes-wrapper');
+    
+    let sessionUserId = 1;
 
     fetch('http://localhost:8000/api/auth/users', {
         method: 'GET',
@@ -39,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const post = data.data
         const author = post.author_id
         const commentList = post.comments
-        const likes = post.likes
+        const likes = post.likes.filter(l => l.status == 1)
 
         document.querySelector('.post-detail h2').textContent = post.title;
         document.querySelector('.author-img img').src = author.profile_img;
@@ -50,7 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#likes-wrapper').innerHTML = `${likes.length >= 1000 ? (likes.length / 1000).toFixed(1) + 'k' : likes.length}<br>좋아요수`;
         document.querySelector('#views-wrapper').innerHTML = `${post.views >= 1000 ? (post.views / 1000).toFixed(1) + 'k' : post.views}<br>조회수`;
         document.querySelector('#comments-wrapper').innerHTML = `${commentList.length >= 1000 ? (commentList.length / 1000).toFixed(1) + 'k' : commentList.length}<br>댓글 수`;
-    
+        initializeLikeButton(post, sessionUserId);
+        likeButton.addEventListener('click', () => toggleLike(post, sessionUserId));
+
         commentList.forEach(comment => {
             
             fetch(`http://localhost:8000/api/auth/users/${comment.author_id}`, {
@@ -69,13 +73,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <img src="${commentAuthor.profile_img}" alt="프로필 이미지">
                             </div>
                             <span class="comment-author">${commentAuthor.username}</span>
-                            <span class="comment-date">${comment.createdAt}</span>
+                            <span class="comment-date">${comment.createdAt} ${comment.createdAt === comment.updatedAt?' ':'(수정됨)'}</span>
                         </div>
                         <span id= "comment-content" class="comment-content">${comment.content}</span>
                     </div>
                     
                 `;
-                if (data.data.author_id == sessionUserId) {
+                if (commentAuthor.id == sessionUserId) {
                     commentElement.innerHTML += `
                     <div class="post-detail-button-wrapper">
                         <button id="editComment" class="editComment">수정</button>
@@ -213,6 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = '/auth/logout/';
     });
 
+    
+
     // 모달 관련 함수
     function showModal(message, confirmCallback) {
         modalOverlay.style.display = 'flex';
@@ -253,4 +259,47 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('deletePostButton').addEventListener('click', () => {
         showModal('정말로 이 게시글을 삭제하시겠습니까?');
     });
+
+    // 좋아요 버튼 초기 상태 설정
+    function initializeLikeButton(postData, userId) {
+        console.log(postData, userId)
+        const likeStatus = postData.likes.find(l => l.post_id == postData.id && l.user_id == userId);
+        console.log(likeStatus)
+        if (likeStatus){
+            if (likeStatus.status == 1){
+                console.log(likeStatus.status)
+                likeButton.classList.add('liked'); // 좋아요 상태 클래스 추가
+            }
+            else {
+                likeButton.classList.remove('liked');
+            }
+        }
+    }
+
+    function toggleLike(postData, userId) {
+        fetch(`http://localhost:8000/api/posts/${postData.id}/likes`, {
+            method: 'POST', // 서버에 좋아요 상태 변경 요청
+            body: new URLSearchParams({ userId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // 서버 응답에 따라 버튼 스타일 및 좋아요 수 업데이트
+            const likeCount = data.data.likeCount;
+            console.log("fe.jscode like toggle res-> status, likecount",data, likeCount)
+
+            if (data.data.status) {
+                likeButton.classList.add('liked');
+            } else {
+                likeButton.classList.remove('liked');
+            }
+            // 버튼 강제 리로드ㅜㅜ
+            likeButton.style.display = "none"; // 일단 숨기기
+            setTimeout(() => {
+                likeButton.style.display = ""; // 다시 보이게 설정
+            }, 0);
+
+            likeButton.innerHTML = `${likeCount >= 1000 ? (likeCount / 1000).toFixed(1) + 'k' : likeCount}<br>좋아요수`;
+        })
+        .catch(error => console.error('Error toggling like status:', error));
+    }
 });
