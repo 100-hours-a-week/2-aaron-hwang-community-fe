@@ -259,3 +259,6 @@ button:hover {
     width: 40px;
     margin: 10px;
 }
+.footer-div.liked {
+    background-color: #fee500;
+}
