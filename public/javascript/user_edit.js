@@ -11,7 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const userEdit = document.querySelector(".user-edit");
     const passwordEdit = document.querySelector(".password-edit");
     const logout = document.querySelector(".logout");
-    
+    const editForm = document.getElementById('userEditForm');
+    const userId = window.location.pathname.split('/').pop();
     const dummpyUser = {
         id: 1,
         email: 'aaron@naver.com',
@@ -40,9 +41,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
     // 수정하기 버튼 클릭 이벤트
-    document.getElementById('userEditForm').addEventListener('submit', function(event) {
+    editForm.addEventListener('submit', async (event) => {
         event.preventDefault();
-        console.log('button pushed')
         const username = document.getElementById('username').value;
         const helperText = document.getElementById('username-helper');
         helperText.innerHTML = `&nbsp;`;
@@ -56,22 +56,51 @@ document.addEventListener("DOMContentLoaded", () => {
             helperText.textContent = '중복된 닉네임입니다.';
         } else {
             // 유효성 검사가 통과되면 토스트 메시지 표시
+            try {
+                const response = await fetch(`http://localhost:8000/api/auth/users/${userId}`, {
+                    method: "PATCH",
+                    body: new URLSearchParams({username}),
+                });
 
-            showToast('수정 완료되었습니다.');
+                if (response.ok) {
+                    showToast('수정 완료되었습니다.');
+                    setTimeout(() => {
+                        window.location = `/posts`;
+                    }, 1500);
+                } else {
+                    showToast(response.error.message || "닉네임 수정에 실패했습니다.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("요청 처리 중 오류가 발생했습니다.");
+            }
+            
         }
     });
     
     // 삭제 하기
-    dropUser.addEventListener("click", () => {
-        showModal("정말로 탈퇴하시겠습니까?", () => {
-            // TODO:  로직 실행 (백엔드와 연동)
-            alert("탈퇴되었습니다.");
+    dropUser.addEventListener("click",  () => {
+        showModal("정말로 탈퇴하시겠습니까?", async () => {
+            try{
+                const response = await fetch(`http://localhost:8000/api/auth/users/${userId}`,{
+                    method: "DELETE"
+                });
+                if (response.ok){
+                    alert('탈퇴되었습니다');
+                    window.location = '/';
+                } else {
+                    alert("잘못된 요청입니다.");
+                }
+                
+            } catch{
+                console.error("Error:", error);
+                alert("요청 처리 중 오류가 발생했습니다.");
+            }
+            
         });
     });
 
     function showToast(message) {
-        // 백엔드 기능 연결
-
         // 토스트 메시지 요소 생성
         const toast = document.createElement('div');
         toast.className = 'toast';
@@ -81,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // 토스트 메시지를 body에 추가
         document.body.appendChild(toast);
 
-        // 3초 후에 토스트 메시지 제거
+        // 2초 후에 토스트 메시지 제거
         setTimeout(() => {
             toast.setAttribute('style', 'display: none');
         }, 2000);
