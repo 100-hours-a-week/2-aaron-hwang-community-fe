@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let sessionUserId = 1;
 
-    fetch('http://localhost:8000/api/auth/users', {
+    fetch('http://localhost:8000/api/users', {
         method: 'GET',
         credentials: 'include'  // 세션 쿠키를 포함하여 전송
     })
@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fetch(`http://localhost:8000/api/posts/${postId}`, {
         method: 'GET',
+        credentials: 'include',
     })
     .then((response) => response.json())
     .then((data) => {
@@ -57,8 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         commentList.forEach(comment => {
             
-            fetch(`http://localhost:8000/api/auth/users/${comment.author_id}`, {
+            fetch(`http://localhost:8000/api/users/${comment.author_id}`, {
                 method: 'GET',
+                credentials: 'include', // 쿠키 포함
             })
             .then((response) => response.json())
             .then((data) => {
@@ -112,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showModal('댓글을 삭제하시겠습니까?', () => {
                 fetch(`http://localhost:8000/api/comments/${context.getAttribute('alt')}`, {
                     method: 'DELETE',
+                    credentials: 'include', // 쿠키 포함
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -182,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const commentId = submitComment.getAttribute('alt')
                 response = await fetch(`http://127.0.0.1:8000/api/comments/${commentId}`, {
                     method: 'PATCH',
-                    //credentials: 'include',
+                    credentials: 'include',
                     body: new URLSearchParams({commentContent}),
                 });
             }
@@ -212,28 +215,26 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = '/auth/change-password/1';
     });
 
-    logout.addEventListener('click', () => {
-        logout.addEventListener("click", async () => {
-            try {
-                const response = await fetch('http://localhost:8000/api/auth/logout', {
-                    method: 'POST',
-                    // credentials: 'include', // 세션 쿠키를 포함
-                });
-    
-                if (response.ok) {
-                    const result = await response.json();
-                    alert(result.message || '로그아웃 성공!');
-                    window.location.href = '/'; // 로그아웃 후 로그인 페이지로 이동
-                } else {
-                    const error = await response.json();
-                    alert(error.message || '로그아웃 실패!');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('로그아웃 요청 중 오류가 발생했습니다.');
+    logout.addEventListener("click", async () => {
+        try {
+            const response = await fetch('http://localhost:8000/api/auth/logout', {
+                method: 'POST',
+                credentials: 'include', // 세션 쿠키를 포함
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                alert(result.message || '로그아웃 성공!');
+                window.location.href = '/'; // 로그아웃 후 로그인 페이지로 이동
+            } else {
+                const error = await response.json();
+                alert(error.message || '로그아웃 실패!');
             }
-            
-        });
+        } catch (error) {
+            console.error('Error:', error);
+            alert('로그아웃 요청 중 오류가 발생했습니다.');
+        }
+        
     });
 
     
@@ -256,6 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function deletePosts() {
         fetch(`http://localhost:8000/api/posts/${postId}`, {
             method: 'DELETE',
+            credentials: 'include', // 쿠키 포함
             headers: {
                 'Content-Type': 'application/json',
         },
@@ -298,6 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function toggleLike(postData, userId) {
         fetch(`http://localhost:8000/api/posts/${postData.id}/likes`, {
             method: 'POST', // 서버에 좋아요 상태 변경 요청
+            credentials: 'include', // 쿠키 포함
             body: new URLSearchParams({ userId })
         })
         .then(response => response.json())

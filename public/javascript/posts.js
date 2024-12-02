@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const postsContainer = document.getElementById('post-list');
 
     // 현재 사용자 프로필 사진 요청
-    fetch('http://localhost:8000/api/auth/users', {
+    fetch('http://localhost:8000/api/users', {
         method: 'GET',
         credentials: 'include'  // 세션 쿠키를 포함하여 전송
     })
