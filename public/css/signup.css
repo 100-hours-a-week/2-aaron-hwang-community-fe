@@ -45,7 +45,7 @@ main {
     flex-direction: column;
     width: 100%;
 }
-.signupForm p[class='form-header'] {
+.user-create-form p[class='form-header'] {
     font-size: 30px;
     font-weight: bold;
     margin-top: 0px;
@@ -55,7 +55,7 @@ main {
     width: 100%
 }
 
-.signupForm {
+.user-create-form {
     text-align: center;
     padding-bottom: 20px;
 }

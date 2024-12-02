@@ -8,11 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const passwordConfirmInput = document.getElementById("pwd2");
     const usernameInput = document.getElementById("username");
     const submitButton = document.querySelector("button[type='submit']");
-
     const emailHelper = document.getElementById("email-helper");
     const passwordHelper = document.getElementById("password-helper");
     const password2Helper = document.getElementById("password2-helper");
     const usernameHelper = document.getElementById("username-helper");
+    const signupForm = document.getElementById("signupForm");
 
     submitButton.disabled = true;
     submitButton.style.backgroundColor = "#ddd";
@@ -122,21 +122,51 @@ document.addEventListener("DOMContentLoaded", () => {
     passwordInput.addEventListener("input", validateForm);
     passwordConfirmInput.addEventListener("input", validateForm);
     usernameInput.addEventListener("input", validateForm);
-});
-document
-    .querySelector('.profile-img-wrapper')
-    .addEventListener('click', function () {
-    document.getElementById('profile_img').click(); // 이미지 클릭 시 파일 선택창 열기
-});
 
-document
-    .getElementById('profile_img')
-    .addEventListener('change', function (event) {
-        const reader = new FileReader();
-        reader.onload = function () {
-            const preview = document.getElementById('profilePreview');
-            preview.src = reader.result;
-            preview.style.display = 'block';
-        };
-        reader.readAsDataURL(event.target.files[0]);
+    signupForm.addEventListener("submit", async (event) => {
+        event.preventDefault();             
+        const email = emailInput.value;
+        const pwd = passwordInput.value;
+        const pwd2 = passwordConfirmInput.value;
+        const profile_img = profileInput.value;
+        const username = usernameInput.value;
+        
+        try {
+            const response = await fetch(`http://localhost:8000/api/auth/signup`, {
+                method: "POST",
+                body: new URLSearchParams({email, pwd, pwd2, profile_img, username}),
+                credentials: "include"
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                alert(result.message || "회원가입 되었습니다!");
+                window.location = "/posts"
+            } else {
+                const error = await response.json();
+                alert(error.message || "회원 가입에 실패했습니다.");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("요청 처리 중 오류가 발생했습니다.");
+        }
     });
+
+    document
+        .querySelector('.profile-img-wrapper')
+        .addEventListener('click', function () {
+        document.getElementById('profile_img').click(); // 이미지 클릭 시 파일 선택창 열기
+    });
+
+    document
+        .getElementById('profile_img')
+        .addEventListener('change', function (event) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                const preview = document.getElementById('profilePreview');
+                preview.src = reader.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        });
+});
