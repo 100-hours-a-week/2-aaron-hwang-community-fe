@@ -150,6 +150,8 @@ button:hover {
     padding-top: 25px;
     padding-bottom: 25px;
     gap: 5px;
+    flex-shrink: 0;
+    height: 30px;
 }
 .post-detail-body {
     margin-bottom: 10%;
@@ -259,6 +261,19 @@ button:hover {
     width: 40px;
     margin: 10px;
 }
-.footer-div.liked {
+.footer-div-liked {
+    width:100px;
+    height: 70px;
+    display: flex;
     background-color: #fee500;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #191919;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+#editPost, #deletePost {
+    display: none;
 }
