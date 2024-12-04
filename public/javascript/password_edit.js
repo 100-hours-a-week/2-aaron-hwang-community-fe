@@ -92,6 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const response = await fetch(`http://localhost:8000/api/users/${userId}/password`, {
                 method: "PATCH",
                 body: new URLSearchParams({password, newPassword1, newPassword2}),
+                credentials: "include"
             })
 
             if (response.ok) {

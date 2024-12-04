@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const backButton = document.getElementById('backButton');
     const editPost = document.getElementById('editPost');
     const deletePost = document.getElementById('deletePost');
@@ -15,18 +15,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const commentsContainer = document.getElementById('comment-list');
     const likeButton = document.getElementById('likes-wrapper');
     
-    let sessionUserId = 1;
+    let sessionUser;
 
-    fetch('http://localhost:8000/api/users', {
+    await fetch('http://localhost:8000/api/users', {
         method: 'GET',
         credentials: 'include'  // 세션 쿠키를 포함하여 전송
     })
     .then(response => response.json())
     .then(data => {
-            sessionUserId = data.data.id;
-            const userProfileImage = document.querySelector('.profile-img > img');
-            userProfileImage.src = data.data.profile_img; // 프로필 이미지 설정
-            userProfileImage.alt = data.data.username; // 사용자 이름
+        sessionUser = data.data;
+        const userProfileImage = document.querySelector('.profile-img > img');
+        userProfileImage.src = data.data.profile_img; // 프로필 이미지 설정
+        userProfileImage.alt = data.data.username; // 사용자 이름
     })
     .catch(error => {
             console.error('사용자 정보 조회 실패:', error);
@@ -40,25 +40,31 @@ document.addEventListener('DOMContentLoaded', () => {
     .then((response) => response.json())
     .then((data) => {
         const post = data.data
-        const author = post.author_id
         const commentList = post.comments
-        const likes = post.likes.filter(l => l.status == 1)
+        const likes = post.likes
+        console.log(post)
+
+        // 작성자랑 현재 사용자가 다르면 수정/삭제 불가
+        if (post.author_id == sessionUser.id) {
+            console.log(post.author_id, (post.author_id == sessionUser.id), sessionUser.id)
+            editPost.setAttribute("display", "block");
+            deletePost.setAttribute("display", "block");
+        }
 
         document.querySelector('.post-detail h2').textContent = post.title;
-        document.querySelector('.author-img img').src = author.profile_img;
-        document.querySelector('.post-author').textContent = author.username;
-        document.querySelector('.post-date').textContent = post.createdAt;
+        document.querySelector('.author-img img').src = post.author_profile_img;
+        document.querySelector('.post-author').textContent = post.author_username;
+        document.querySelector('.post-date').textContent = post.created_at;
         document.querySelector('.post-content').innerHTML = `<p>${post.content}</p>`;
         document.querySelector('.post-content-img').src = post.image;
         document.querySelector('#likes-wrapper').innerHTML = `${likes.length >= 1000 ? (likes.length / 1000).toFixed(1) + 'k' : likes.length}<br>좋아요수`;
         document.querySelector('#views-wrapper').innerHTML = `${post.views >= 1000 ? (post.views / 1000).toFixed(1) + 'k' : post.views}<br>조회수`;
         document.querySelector('#comments-wrapper').innerHTML = `${commentList.length >= 1000 ? (commentList.length / 1000).toFixed(1) + 'k' : commentList.length}<br>댓글 수`;
-        initializeLikeButton(post, sessionUserId);
-        likeButton.addEventListener('click', () => toggleLike(post, sessionUserId));
+        initializeLikeButton(post, sessionUser.id);
+        likeButton.addEventListener('click', () => toggleLike(post, sessionUser.id));
 
-        commentList.forEach(comment => {
-            
-            fetch(`http://localhost:8000/api/users/${comment.author_id}`, {
+        commentList.forEach(async comment => {
+            await fetch(`http://localhost:8000/api/users/${comment.author_id}`, {
                 method: 'GET',
                 credentials: 'include', // 쿠키 포함
             })
@@ -75,13 +81,14 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <img src="${commentAuthor.profile_img}" alt="프로필 이미지">
                             </div>
                             <span class="comment-author">${commentAuthor.username}</span>
-                            <span class="comment-date">${comment.createdAt} ${comment.createdAt === comment.updatedAt?' ':'(수정됨)'}</span>
+                            <span class="comment-date">${comment.created_at} ${comment.created_at === comment.updated_at?' ':'(수정됨)'}</span>
                         </div>
                         <span id= "comment-content" class="comment-content">${comment.content}</span>
                     </div>
                     
                 `;
-                if (commentAuthor.id == sessionUserId) {
+                // 댓글 작성자랑 현재 사용자가 같은 경우에만 수정/삭제 버튼 추가
+                if (commentAuthor.id == sessionUser.id) {
                     commentElement.innerHTML += `
                     <div class="post-detail-button-wrapper">
                         <button id="editComment" class="editComment">수정</button>
@@ -174,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let response;
 
             if (flag === '댓글 등록'){
-                response = await fetch(`http://127.0.0.1:8000/api/comments/${postId}`, {
+                response = await fetch(`http://localhost:8000/api/comments/${postId}`, {
                     method: 'POST',
                     credentials: 'include',
                     body: new URLSearchParams({commentContent}),
@@ -183,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
             else if (flag === '댓글 수정'){
                 console.log("asdasd ")
                 const commentId = submitComment.getAttribute('alt')
-                response = await fetch(`http://127.0.0.1:8000/api/comments/${commentId}`, {
+                response = await fetch(`http://localhost:8000/api/comments/${commentId}`, {
                     method: 'PATCH',
                     credentials: 'include',
                     body: new URLSearchParams({commentContent}),
@@ -207,12 +214,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // 클릭 이벤트 리스너 추가
     userEdit.addEventListener('click', () => {
         // 회원정보 수정 페이지로 이동하는 예제 코드
-        window.location.href = '/auth/edit/1';
+        window.location.href = `/auth/edit/${sessionUser.id}`;
     });
 
     passwordEdit.addEventListener('click', () => {
         // 비밀번호 수정 페이지로 이동하는 예제 코드
-        window.location.href = '/auth/change-password/1';
+        window.location.href = `/auth/change-password/${sessionUser.id}`;
     });
 
     logout.addEventListener("click", async () => {
@@ -283,20 +290,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 좋아요 버튼 초기 상태 설정
     function initializeLikeButton(postData, userId) {
-        console.log(postData, userId)
         const likeStatus = postData.likes.find(l => l.post_id == postData.id && l.user_id == userId);
-        console.log(likeStatus)
         if (likeStatus){
             if (likeStatus.status == 1){
                 console.log(likeStatus.status)
-                likeButton.classList.add('liked'); // 좋아요 상태 클래스 추가
+                likeButton.className = 'footer-div-liked'; // 좋아요 상태 클래스 추가
             }
             else {
-                likeButton.classList.remove('liked');
+                likeButton.className = 'footer-div';
             }
         }
     }
 
+    // 좋아요 상태 변경
     function toggleLike(postData, userId) {
         fetch(`http://localhost:8000/api/posts/${postData.id}/likes`, {
             method: 'POST', // 서버에 좋아요 상태 변경 요청
@@ -310,10 +316,11 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("fe.jscode like toggle res-> status, likecount",data, likeCount)
 
             if (data.data.status) {
-                likeButton.classList.add('liked');
+                likeButton.className = 'footer-div-liked'
             } else {
-                likeButton.classList.remove('liked');
+                likeButton.className = 'footer-div';
             }
+
             // 버튼 강제 리로드ㅜㅜ
             likeButton.style.display = "none"; // 일단 숨기기
             setTimeout(() => {

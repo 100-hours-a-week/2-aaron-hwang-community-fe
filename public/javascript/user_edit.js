@@ -1,6 +1,6 @@
 console.log('fe-signup-js-connected');
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     const email = document.getElementById("email");
     const profileImg = document.getElementById("profilePreview");
     const modalOverlay = document.getElementById("modalOverlay");
@@ -13,15 +13,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const logout = document.querySelector(".logout");
     const editForm = document.getElementById('userEditForm');
     const userId = window.location.pathname.split('/').pop();
-    const dummpyUser = {
-        id: 1,
-        email: 'aaron@naver.com',
-        username: 'aaron',
-        profile_img: '/images/profile_img.jpg'
-    }
 
-    email.innerText = dummpyUser.email;
-    profileImg.setAttribute('src', dummpyUser.profile_img);
+    let sessionUser;
+
+    await fetch('http://localhost:8000/api/users', {
+        method: 'GET',
+        credentials: 'include'  // 세션 쿠키를 포함하여 전송
+    })
+    .then(response => response.json())
+    .then(data => {
+        sessionUser = data.data;
+        const userProfileImage = document.querySelector('.profile-img > img');
+        userProfileImage.src = data.data.profile_img; // 프로필 이미지 설정
+        userProfileImage.alt = data.data.username; // 사용자 이름
+    })
+    .catch(error => {
+            console.error('사용자 정보 조회 실패:', error);
+        // 로그인이 필요한 경우 로그인 페이지로 리디렉션 가능
+    });
+
+    console.log(sessionUser)
+    email.innerText = sessionUser.email;
+    profileImg.setAttribute('src', sessionUser.profile_img);
     document
         .querySelector('.editor-wrapper')
         .addEventListener('click', function () {
@@ -57,9 +70,10 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             // 유효성 검사가 통과되면 토스트 메시지 표시
             try {
-                const response = await fetch(`http://localhost:8000/api/auth/users/${userId}`, {
+                const response = await fetch(`http://localhost:8000/api/users/${userId}`, {
                     method: "PATCH",
                     body: new URLSearchParams({username}),
+                    credentials: "include"
                 });
 
                 if (response.ok) {
@@ -68,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         window.location = `/posts`;
                     }, 1500);
                 } else {
-                    showToast(response.error.message || "닉네임 수정에 실패했습니다.");
+                    showToast(response.error || "닉네임 수정에 실패했습니다.");
                 }
             } catch (error) {
                 console.error("Error:", error);
@@ -82,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
     dropUser.addEventListener("click",  () => {
         showModal("정말로 탈퇴하시겠습니까?", async () => {
             try{
-                const response = await fetch(`http://localhost:8000/api/auth/users/${userId}`,{
+                const response = await fetch(`http://localhost:8000/api/users/${userId}`,{
                     method: "DELETE"
                 });
                 if (response.ok){
@@ -134,19 +148,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // 클릭 이벤트 리스너 추가
     userEdit.addEventListener("click", () => {
         // 회원정보 수정 페이지로 이동하는 예제 코드
-        window.location.href = "/auth/edit/1";
+        window.location.href = `/auth/edit/${sessionUser.id}`;
     });
 
     passwordEdit.addEventListener("click", () => {
         // 비밀번호 수정 페이지로 이동하는 예제 코드
-        window.location.href = "/auth/change-password/1";
+        window.location.href = `/auth/change-password/${sessionUser.id}`;
     });
 
     logout.addEventListener("click", async () => {
         try {
             const response = await fetch('http://localhost:8000/api/auth/logout', {
                 method: 'POST',
-                // credentials: 'include', // 세션 쿠키를 포함
+                credentials: 'include', // 세션 쿠키를 포함
             });
 
             if (response.ok) {

@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordEdit = document.querySelector(".password-edit");
     const logout = document.querySelector(".logout");
     const postsContainer = document.getElementById('post-list');
+    let sessionUser;
 
     // 현재 사용자 프로필 사진 요청
     fetch('http://localhost:8000/api/users', {
@@ -17,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(response => response.json())
     .then(data => {
+            sessionUser = data.data;
             const userProfileImage = document.querySelector('.profile-img > img');
             userProfileImage.src = data.data.profile_img; // 프로필 이미지 설정
             userProfileImage.alt = data.data.email; // 사용자 이메일
@@ -31,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then((response) => response.json())
     .then((data) => {
+        console.log(data)
         data.data.forEach(post => {
             
             const postElement = document.createElement('fieldset');
@@ -49,13 +52,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span class="post-reply">조회수 ${post.views >= 1000 ? (post.views / 1000).toFixed(1) + 'k' : post.views}</span>    
                         </div>
                         <div class="post-header-wrapper">
-                            <span class="post-date">${post.createdAt}</span>
+                            <span class="post-date">${post.created_at}</span>
                         </div>
                     </div>                       
                 </div>
                 <div class="post-footer">
-                    <img src="${post.author.profile_img}"></img>
-                    <span class="post-author">${post.author.username}</span>
+                    <img src="${post.author_profile_img}"></img>
+                    <span class="post-author">${post.author_username}</span>
 
                 </div>
             `;
@@ -72,12 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // 클릭 이벤트 리스너 추가
     userEdit.addEventListener("click", () => {
         // 회원정보 수정 페이지로 이동하는 예제 코드
-        window.location.href = "/auth/edit/1";
+        window.location.href = `/auth/edit/${sessionUser.id}`;
     });
 
     passwordEdit.addEventListener("click", () => {
         // 비밀번호 수정 페이지로 이동하는 예제 코드
-        window.location.href = "/auth/change-password/1";
+        window.location.href = `/auth/change-password/${sessionUser.id}`;
     });
 
     logout.addEventListener("click", async () => {
@@ -102,8 +105,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
     });
 });
-/*
-async function loadMorePosts() {
+
+/* async function loadMorePosts() {
     // 서버에서 게시글 목록을 추가로 받아오는 함수
     const response = await fetch('/api/posts'); // 예시 API 엔드포인트
     const posts = await response.json();
@@ -113,23 +116,4 @@ async function loadMorePosts() {
         
         
     });
-}
-    
-
-// 날짜 포맷 함수
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, '0');
-    const dd = String(date.getDate()).padStart(2, '0');
-    const hh = String(date.getHours()).padStart(2, '0');
-    const min = String(date.getMinutes()).padStart(2, '0');
-    const sec = String(date.getSeconds()).padStart(2, '0');
-    return `${yyyy}-${mm}-${dd} ${hh}:${min}:${sec}`;
-}
-
-// 숫자 포맷 (k 단위) 함수
-function formatStats(number) {
-    return number >= 1000 ? (number / 1000).toFixed(1) + 'k' : number;
-}
-*/
+} */
