@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     const titleInput = document.getElementById("title");
     const contentInput = document.getElementById("content");
     const submitButton = document.getElementById("submit-button");
@@ -9,6 +9,27 @@ document.addEventListener("DOMContentLoaded", () => {
     const passwordEdit = document.querySelector(".password-edit");
     const logout = document.querySelector(".logout");
     const createForm = document.getElementById("createForm")
+    const homeLink = document.getElementById("homeLink");
+    let sessionUser;
+
+    await fetch('http://localhost:8000/api/users', {
+        method: 'GET',
+        credentials: 'include'  // 세션 쿠키를 포함하여 전송
+    })
+    .then(response => response.json())
+    .then(data => {
+        sessionUser = data.data;
+        const userProfileImage = document.querySelector('.profile-img > img');
+        userProfileImage.src = data.data.profile_img; // 프로필 이미지 설정
+        userProfileImage.alt = data.data.username; // 사용자 이름
+        
+        // 로그인 상태이면 게시글 페이지로 이동
+        if (sessionUser) homeLink.href = '/posts';
+    })
+    .catch(error => {
+            console.error('사용자 정보 조회 실패:', error);
+        // 로그인이 필요한 경우 로그인 페이지로 리디렉션 가능
+    });
     
     backButton.addEventListener("click", () => {
         history.back();
@@ -66,11 +87,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (response.ok) {
                     const result = await response.json();
-                    alert(result.message || "게시글이 작성되었습니다!");
+                    console.log(result.data)
+                    alert("게시글이 작성되었습니다!");
                     window.location = "/posts"
                 } else {
                     const error = await response.json();
-                    alert(error.message || "게시글 작성에 실패했습니다.");
+                    console.log(error);
+                    alert("게시글 작성에 실패했습니다.");
                 }
             } catch (error) {
                 console.error("Error:", error);

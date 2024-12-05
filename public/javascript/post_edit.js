@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async() => {
     const updateForm = document.getElementById("updateForm");
     const titleInput = document.getElementById("title");
     const contentInput = document.getElementById("content");
@@ -10,7 +10,29 @@ document.addEventListener("DOMContentLoaded", () => {
     const passwordEdit = document.querySelector(".password-edit");
     const logout = document.querySelector(".logout");
     const postId = window.location.pathname.split('/').pop();
+    const homeLink = document.getElementById('homeLink');
     
+    let sessionUser;
+
+    await fetch('http://localhost:8000/api/users', {
+        method: 'GET',
+        credentials: 'include'  // 세션 쿠키를 포함하여 전송
+    })
+    .then(response => response.json())
+    .then(data => {
+        sessionUser = data.data;
+        const userProfileImage = document.querySelector('.profile-img > img');
+        userProfileImage.src = data.data.profile_img; // 프로필 이미지 설정
+        userProfileImage.alt = data.data.username; // 사용자 이름
+        
+        // 로그인 상태이면 게시글 페이지로 이동
+        if (sessionUser) homeLink.href = '/posts';
+    })
+    .catch(error => {
+            console.error('사용자 정보 조회 실패:', error);
+        // 로그인이 필요한 경우 로그인 페이지로 리디렉션 가능
+    });
+
     backButton.addEventListener("click", () => {
         history.back();
     });
@@ -82,12 +104,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // 클릭 이벤트 리스너 추가
     userEdit.addEventListener("click", () => {
         // 회원정보 수정 페이지로 이동하는 예제 코드
-        window.location.href = "/auth/edit/1";
+        window.location.href = `/auth/edit/${sessionUser.id}`;
     });
 
     passwordEdit.addEventListener("click", () => {
         // 비밀번호 수정 페이지로 이동하는 예제 코드
-        window.location.href = "/auth/change-password/1";
+        window.location.href = `/auth/change-password/${sessionUser.id}`;
     });
 
     logout.addEventListener("click", async () => {
