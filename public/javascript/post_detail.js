@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const logout = document.querySelector('.logout');
     const commentsContainer = document.getElementById('comment-list');
     const likeButton = document.getElementById('likes-wrapper');
-    
+    const homeLink = document.getElementById('homeLink');
     let sessionUser;
 
     await fetch('http://localhost:8000/api/users', {
@@ -27,6 +27,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const userProfileImage = document.querySelector('.profile-img > img');
         userProfileImage.src = data.data.profile_img; // 프로필 이미지 설정
         userProfileImage.alt = data.data.username; // 사용자 이름
+
+        // 로그인 상태이면 게시글 페이지로 이동
+        if (sessionUser) homeLink.href = '/posts';
     })
     .catch(error => {
             console.error('사용자 정보 조회 실패:', error);
@@ -43,12 +46,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         const commentList = post.comments
         const likes = post.likes
         console.log(post)
+        console.log(likes.length)
 
         // 작성자랑 현재 사용자가 다르면 수정/삭제 불가
         if (post.author_id == sessionUser.id) {
             console.log(post.author_id, (post.author_id == sessionUser.id), sessionUser.id)
-            editPost.setAttribute("display", "block");
-            deletePost.setAttribute("display", "block");
+            editPost.style.display = "block";
+            deletePost.style.display = "block";
         }
 
         document.querySelector('.post-detail h2').textContent = post.title;
@@ -60,8 +64,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.querySelector('#likes-wrapper').innerHTML = `${likes.length >= 1000 ? (likes.length / 1000).toFixed(1) + 'k' : likes.length}<br>좋아요수`;
         document.querySelector('#views-wrapper').innerHTML = `${post.views >= 1000 ? (post.views / 1000).toFixed(1) + 'k' : post.views}<br>조회수`;
         document.querySelector('#comments-wrapper').innerHTML = `${commentList.length >= 1000 ? (commentList.length / 1000).toFixed(1) + 'k' : commentList.length}<br>댓글 수`;
-        initializeLikeButton(post, sessionUser.id);
-        likeButton.addEventListener('click', () => toggleLike(post, sessionUser.id));
+        initializeLikeButton(post);
+        likeButton.addEventListener('click', () => toggleLike(post));
 
         commentList.forEach(async comment => {
             await fetch(`http://localhost:8000/api/users/${comment.author_id}`, {
@@ -98,8 +102,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 commentsContainer.appendChild(commentElement);
     
             })
-            const editComment = document.getElementById('editComment');
-            const deleteComment = document.getElementById('deleteComment');
             
         })
     })
@@ -188,7 +190,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
             }
             else if (flag === '댓글 수정'){
-                console.log("asdasd ")
                 const commentId = submitComment.getAttribute('alt')
                 response = await fetch(`http://localhost:8000/api/comments/${commentId}`, {
                     method: 'PATCH',
@@ -289,8 +290,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // 좋아요 버튼 초기 상태 설정
-    function initializeLikeButton(postData, userId) {
-        const likeStatus = postData.likes.find(l => l.post_id == postData.id && l.user_id == userId);
+    function initializeLikeButton(post) {
+        const likeStatus = post.likes.find(l => l.post_id == post.id && l.user_id == sessionUser.id);
         if (likeStatus){
             if (likeStatus.status == 1){
                 console.log(likeStatus.status)
@@ -303,17 +304,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // 좋아요 상태 변경
-    function toggleLike(postData, userId) {
+    function toggleLike(postData) {
         fetch(`http://localhost:8000/api/posts/${postData.id}/likes`, {
             method: 'POST', // 서버에 좋아요 상태 변경 요청
             credentials: 'include', // 쿠키 포함
-            body: new URLSearchParams({ userId })
         })
         .then(response => response.json())
         .then(data => {
             // 서버 응답에 따라 버튼 스타일 및 좋아요 수 업데이트
+            console.log(data)
             const likeCount = data.data.likeCount;
-            console.log("fe.jscode like toggle res-> status, likecount",data, likeCount)
 
             if (data.data.status) {
                 likeButton.className = 'footer-div-liked'

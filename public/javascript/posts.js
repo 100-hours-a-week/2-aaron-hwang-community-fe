@@ -4,15 +4,17 @@ window.addEventListener('scroll', function () {
         loadMorePosts();
     }
 });
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const userEdit = document.querySelector(".user-edit");
     const passwordEdit = document.querySelector(".password-edit");
     const logout = document.querySelector(".logout");
     const postsContainer = document.getElementById('post-list');
+    const homeLink = document.getElementById('homeLink');
+
     let sessionUser;
 
     // 현재 사용자 프로필 사진 요청
-    fetch('http://localhost:8000/api/users', {
+    await fetch('http://localhost:8000/api/users', {
         method: 'GET',
         credentials: 'include'  // 세션 쿠키를 포함하여 전송
     })
@@ -22,6 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const userProfileImage = document.querySelector('.profile-img > img');
             userProfileImage.src = data.data.profile_img; // 프로필 이미지 설정
             userProfileImage.alt = data.data.email; // 사용자 이메일
+
+            // 로그인 상태이면 게시글 페이지로 이동
+            if (sessionUser) homeLink.href = '/posts';
     })
     .catch(error => {
             console.error('사용자 정보 조회 실패:', error);

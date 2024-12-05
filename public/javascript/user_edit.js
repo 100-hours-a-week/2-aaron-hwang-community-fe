@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const logout = document.querySelector(".logout");
     const editForm = document.getElementById('userEditForm');
     const userId = window.location.pathname.split('/').pop();
-
+    const homeLink = document.getElementById('homeLink');
     let sessionUser;
 
     await fetch('http://localhost:8000/api/users', {
@@ -26,6 +26,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         const userProfileImage = document.querySelector('.profile-img > img');
         userProfileImage.src = data.data.profile_img; // 프로필 이미지 설정
         userProfileImage.alt = data.data.username; // 사용자 이름
+        
+        // 로그인 상태이면 게시글 페이지로 이동
+        if (sessionUser) homeLink.href = '/posts';
     })
     .catch(error => {
             console.error('사용자 정보 조회 실패:', error);
