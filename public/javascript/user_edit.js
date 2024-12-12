@@ -101,7 +101,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         showModal("정말로 탈퇴하시겠습니까?", async () => {
             try{
                 const response = await fetch(`http://localhost:8000/api/users/${userId}`,{
-                    method: "DELETE"
+                    method: "DELETE",
+                    credentials: "include"
                 });
                 if (response.ok){
                     alert('탈퇴되었습니다');
