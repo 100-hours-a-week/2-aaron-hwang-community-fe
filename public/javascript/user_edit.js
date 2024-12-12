@@ -3,6 +3,7 @@ console.log('fe-signup-js-connected');
 document.addEventListener("DOMContentLoaded", async () => {
     const email = document.getElementById("email");
     const profileImg = document.getElementById("profilePreview");
+    const usernameInput = document.getElementById("username");
     const modalOverlay = document.getElementById("modalOverlay");
     const modalMessage = document.getElementById("modalMessage");
     const modalConfirm = document.getElementById("modalConfirm");
@@ -38,6 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log(sessionUser)
     email.innerText = sessionUser.email;
     profileImg.setAttribute('src', sessionUser.profile_img);
+    usernameInput.setAttribute('placeholder', sessionUser.username);
     document
         .querySelector('.editor-wrapper')
         .addEventListener('click', function () {
@@ -59,10 +61,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 수정하기 버튼 클릭 이벤트
     editForm.addEventListener('submit', async (event) => {
         event.preventDefault();
-        const username = document.getElementById('username').value;
         const helperText = document.getElementById('username-helper');
         helperText.innerHTML = `&nbsp;`;
-
+        const username = usernameInput.value
         // 유효성 검사
         if (username === '') {
             helperText.textContent = '닉네임을 입력해 주세요.';
