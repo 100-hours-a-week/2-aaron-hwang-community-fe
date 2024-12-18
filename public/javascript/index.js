@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const password = document.getElementById("pwd").value;
     
         try{
-            fetch('http://localhost:8000/api/auth/login', {
+            fetch(`http://54.180.235.48:8000/api/auth/login`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {

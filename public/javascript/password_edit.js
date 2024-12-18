@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const newPassword1 = document.getElementById("newPassword1").value;
         const newPassword2 = document.getElementById("newPassword2").value;
         try{
-            const response = await fetch(`http://localhost:8000/api/users/${userId}/password`, {
+            const response = await fetch(`http://54.180.235.48:8000/api/users/${userId}/password`, {
                 method: "PATCH",
                 body: new URLSearchParams({password, newPassword1, newPassword2}),
                 credentials: "include"
