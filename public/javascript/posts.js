@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let sessionUser;
 
     // 현재 사용자 프로필 사진 요청
-    await fetch('http://localhost:8000/api/users', {
+    await fetch(`http://54.180.235.48:8000/api/users`, {
         method: 'GET',
         credentials: 'include'  // 세션 쿠키를 포함하여 전송
     })
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     .then(data => {
             sessionUser = data.data;
             const userProfileImage = document.querySelector('.profile-img > img');
-            userProfileImage.src = data.data.profile_img; // 프로필 이미지 설정
+            userProfileImage.src = `data:image/jpeg;base64,${data.data.profile_img}`; // 프로필 이미지 설정
             userProfileImage.alt = data.data.email; // 사용자 이메일
 
             // 로그인 상태이면 게시글 페이지로 이동
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // 로그인이 필요한 경우 로그인 페이지로 리디렉션 가능
     });
 
-    fetch('http://localhost:8000/api/posts', {
+    fetch(`http://54.180.235.48:8000/api/posts`, {
         method: 'GET',
     })
     .then((response) => response.json())
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>                       
                 </div>
                 <div class="post-footer">
-                    <img src="${post.author_profile_img}"></img>
+                    <img src="data:image/jpeg;base64,${post.author_profile_img}"></img>
                     <span class="post-author">${post.author_username}</span>
 
                 </div>
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     logout.addEventListener("click", async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/auth/logout', {
+            const response = await fetch(`http://54.180.235.48:8000/api/auth/logout`, {
                 method: 'POST',
                 // credentials: 'include', // 세션 쿠키를 포함
             });

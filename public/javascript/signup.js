@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const password2Helper = document.getElementById("password2-helper");
     const usernameHelper = document.getElementById("username-helper");
     const signupForm = document.getElementById("signupForm");
+    const reader = new FileReader();
 
     submitButton.disabled = true;
     submitButton.style.backgroundColor = "#ddd";
@@ -128,15 +129,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const email = emailInput.value;
         const pwd = passwordInput.value;
         const pwd2 = passwordConfirmInput.value;
-        const profile_img = profileInput.value;
+        const profile_img = reader.readAsArrayBuffer(profileInput.files[0]);
         const username = usernameInput.value;
         
         try {
-            const response = await fetch(`http://localhost:8000/api/auth/signup`, {
+            const response = await fetch(`http://54.180.235.48:8000/api/auth/signup`, {
                 method: "POST",
                 body: new URLSearchParams({email, pwd, pwd2, profile_img, username}),
                 credentials: "include"
             });
+            console.log(response)
 
             if (response.ok) {
                 const result = await response.json();
@@ -164,9 +166,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const reader = new FileReader();
             reader.onload = function () {
                 const preview = document.getElementById('profilePreview');
+                console.log('fe-signup.js:img-reader',reader)
                 preview.src = reader.result;
                 preview.style.display = 'block';
             };
-            reader.readAsDataURL(event.target.files[0]);
+            reader.readAsArrayBuffer(event.target.files[0]);
+            console.log('fe-signup.js:img-reader2', reader)
         });
 });

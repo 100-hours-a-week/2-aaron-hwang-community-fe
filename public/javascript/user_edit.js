@@ -1,4 +1,5 @@
 console.log('fe-signup-js-connected');
+// const BACKEND_URL = process.env.dev.APP_BACKEND_URL;
 
 document.addEventListener("DOMContentLoaded", async () => {
     const email = document.getElementById("email");
@@ -15,9 +16,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const editForm = document.getElementById('userEditForm');
     const userId = window.location.pathname.split('/').pop();
     const homeLink = document.getElementById('homeLink');
+    const file = document.getElementById('edit_img')
     let sessionUser;
 
-    await fetch('http://localhost:8000/api/users', {
+    await fetch(`http://54.180.235.48:8000/api/users`, {
         method: 'GET',
         credentials: 'include'  // 세션 쿠키를 포함하여 전송
     })
@@ -25,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     .then(data => {
         sessionUser = data.data;
         const userProfileImage = document.querySelector('.profile-img > img');
-        userProfileImage.src = data.data.profile_img; // 프로필 이미지 설정
+        userProfileImage.src = `data:image/jpeg;base64,${data.data.profile_img}`; // 프로필 이미지 설정
         userProfileImage.alt = data.data.username; // 사용자 이름
         
         // 로그인 상태이면 게시글 페이지로 이동
@@ -38,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     console.log(sessionUser)
     email.innerText = sessionUser.email;
-    profileImg.setAttribute('src', sessionUser.profile_img);
+    profileImg.setAttribute('src', `data:image/jpeg;base64,${sessionUser.profile_img}`);
     usernameInput.setAttribute('placeholder', sessionUser.username);
     document
         .querySelector('.editor-wrapper')
@@ -49,21 +51,55 @@ document.addEventListener("DOMContentLoaded", async () => {
     document
         .getElementById('edit_img')
         .addEventListener('change', function (event) {
+            
             const reader = new FileReader();
             reader.onload = function () {
-                const preview = document.getElementById('profilePreview');
-                preview.src = reader.result;
-                preview.style.display = 'block';
+                profileImg.src = reader.result;
+                profileImg.style.display = 'block';
             };
             reader.readAsDataURL(event.target.files[0]);
         });
+
+    const editUser = async (username, imageFile) => {
+        try {
+            const formData = new FormData();
+            formData.append('username', username);
+            if (imageFile) {
+                formData.append('image', imageFile); // 파일 데이터
+            }
+            console.log('FormData contents:');
+            for (let [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
+
+            const response = await fetch(`http://54.180.235.48:8000/api/users/${userId}`, {
+                method: "PATCH",
+                credentials: "include",
+                body: formData
+            });
+
+            if (response.ok) {
+                showToast('수정 완료되었습니다.');
+                setTimeout(() => {
+                    window.location = `/posts`;
+                }, 1500);
+            } else {
+                showToast(response.error || "닉네임 수정에 실패했습니다.");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("요청 처리 중 오류가 발생했습니다.");
+        }
+    }
 
     // 수정하기 버튼 클릭 이벤트
     editForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const helperText = document.getElementById('username-helper');
         helperText.innerHTML = `&nbsp;`;
-        const username = usernameInput.value
+        const username = usernameInput.value;
+        const imageFile = file.files[0];
+        console.log('asd',username, imageFile)
         // 유효성 검사
         if (username === '') {
             helperText.textContent = '닉네임을 입력해 주세요.';
@@ -72,26 +108,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else if (username === "중복된닉네임") { // 예시 중복 닉네임 체크
             helperText.textContent = '중복된 닉네임입니다.';
         } else {
-            // 유효성 검사가 통과되면 토스트 메시지 표시
-            try {
-                const response = await fetch(`http://localhost:8000/api/users/${userId}`, {
-                    method: "PATCH",
-                    body: new URLSearchParams({username}),
-                    credentials: "include"
-                });
-
-                if (response.ok) {
-                    showToast('수정 완료되었습니다.');
-                    setTimeout(() => {
-                        window.location = `/posts`;
-                    }, 1500);
-                } else {
-                    showToast(response.error || "닉네임 수정에 실패했습니다.");
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                alert("요청 처리 중 오류가 발생했습니다.");
-            }
+            
+            await editUser(username, imageFile);
             
         }
     });
@@ -100,7 +118,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     dropUser.addEventListener("click",  () => {
         showModal("정말로 탈퇴하시겠습니까?", async () => {
             try{
-                const response = await fetch(`http://localhost:8000/api/users/${userId}`,{
+                const response = await fetch(`http://54.180.235.48:8000/api/users/${userId}`,{
                     method: "DELETE",
                     credentials: "include"
                 });
@@ -163,7 +181,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     logout.addEventListener("click", async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/auth/logout', {
+            const response = await fetch(`http://54.180.235.48:8000/api/auth/logout`, {
                 method: 'POST',
                 credentials: 'include', // 세션 쿠키를 포함
             });

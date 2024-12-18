@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const homeLink = document.getElementById('homeLink');
     let sessionUser;
 
-    await fetch('http://localhost:8000/api/users', {
+    await fetch(`http://54.180.235.48:8000/api/users`, {
         method: 'GET',
         credentials: 'include'  // 세션 쿠키를 포함하여 전송
     })
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     .then(data => {
         sessionUser = data.data;
         const userProfileImage = document.querySelector('.profile-img > img');
-        userProfileImage.src = data.data.profile_img; // 프로필 이미지 설정
+        userProfileImage.src = `data:image/jpeg;base64,${data.data.profile_img}`; // 프로필 이미지 설정
         userProfileImage.alt = data.data.username; // 사용자 이름
 
         // 로그인 상태이면 게시글 페이지로 이동
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // 로그인이 필요한 경우 로그인 페이지로 리디렉션 가능
     });
 
-    fetch(`http://localhost:8000/api/posts/${postId}`, {
+    fetch(`http://54.180.235.48:8000/api/posts/${postId}`, {
         method: 'GET',
         credentials: 'include',
     })
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         document.querySelector('.post-detail h2').textContent = post.title;
-        document.querySelector('.author-img img').src = post.author_profile_img;
+        document.querySelector('.author-img img').src = `data:image/jpeg;base64,${post.author_profile_img}`;
         document.querySelector('.post-author').textContent = post.author_username;
         document.querySelector('.post-date').textContent = post.created_at;
         document.querySelector('.post-content').innerHTML = `<p>${post.content}</p>`;
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         likeButton.addEventListener('click', () => toggleLike(post));
 
         commentList.forEach(async comment => {
-            await fetch(`http://localhost:8000/api/users/${comment.author_id}`, {
+            await fetch(`http://54.180.235.48:8000/api/users/${comment.author_id}`, {
                 method: 'GET',
                 credentials: 'include', // 쿠키 포함
             })
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class='comment-header'>
                         <div class="post-info">
                             <div class="comment-author-img">
-                                <img src="${commentAuthor.profile_img}" alt="프로필 이미지">
+                                <img src="data:image/jpeg;base64,${commentAuthor.profile_img}" alt="프로필 이미지">
                             </div>
                             <span class="comment-author">${commentAuthor.username}</span>
                             <span class="comment-date">${comment.created_at} ${comment.created_at === comment.updated_at?' ':'(수정됨)'}</span>
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (event.target.classList.contains('deleteComment')) {
             showModal('댓글을 삭제하시겠습니까?', () => {
-                fetch(`http://localhost:8000/api/comments/${context.getAttribute('alt')}`, {
+                fetch(`http://54.180.235.48:8000/api/comments/${context.getAttribute('alt')}`, {
                     method: 'DELETE',
                     credentials: 'include', // 쿠키 포함
                     headers: {
@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             let response;
 
             if (flag === '댓글 등록'){
-                response = await fetch(`http://localhost:8000/api/comments/${postId}`, {
+                response = await fetch(`http://54.180.235.48:8000/api/comments/${postId}`, {
                     method: 'POST',
                     credentials: 'include',
                     body: new URLSearchParams({commentContent}),
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             else if (flag === '댓글 수정'){
                 const commentId = submitComment.getAttribute('alt')
-                response = await fetch(`http://localhost:8000/api/comments/${commentId}`, {
+                response = await fetch(`http://54.180.235.48:8000/api/comments/${commentId}`, {
                     method: 'PATCH',
                     credentials: 'include',
                     body: new URLSearchParams({commentContent}),
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     logout.addEventListener("click", async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/auth/logout', {
+            const response = await fetch('http://54.180.235.48:8000/api/auth/logout', {
                 method: 'POST',
                 credentials: 'include', // 세션 쿠키를 포함
             });
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     // 게시글 삭제 함수
     function deletePosts() {
-        fetch(`http://localhost:8000/api/posts/${postId}`, {
+        fetch(`http://54.180.235.48:8000/api/posts/${postId}`, {
             method: 'DELETE',
             credentials: 'include', // 쿠키 포함
             headers: {
@@ -305,7 +305,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 좋아요 상태 변경
     function toggleLike(postData) {
-        fetch(`http://localhost:8000/api/posts/${postData.id}/likes`, {
+        fetch(`http://54.180.235.48:8000/api/posts/${postData.id}/likes`, {
             method: 'POST', // 서버에 좋아요 상태 변경 요청
             credentials: 'include', // 쿠키 포함
         })

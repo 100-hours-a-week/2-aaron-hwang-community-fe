@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     
     let sessionUser;
 
-    await fetch('http://localhost:8000/api/users', {
+    await fetch(`http://54.180.235.48:8000/api/users`, {
         method: 'GET',
         credentials: 'include'  // 세션 쿠키를 포함하여 전송
     })
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     .then(data => {
         sessionUser = data.data;
         const userProfileImage = document.querySelector('.profile-img > img');
-        userProfileImage.src = data.data.profile_img; // 프로필 이미지 설정
+        userProfileImage.src = `data:image/jpeg;base64,${data.data.profile_img}`; // 프로필 이미지 설정
         userProfileImage.alt = data.data.username; // 사용자 이름
         
         // 로그인 상태이면 게시글 페이지로 이동
@@ -67,6 +67,35 @@ document.addEventListener("DOMContentLoaded", async() => {
         }
     }
 
+    const updatePost = async (title, content, imageFile) => {
+        const formData = new FormData();
+            formData.append('title', title); // 텍스트 데이터
+            formData.append('content', content); // 텍스트 데이터
+            if (imageFile) {
+                formData.append('image', imageFile); // 파일 데이터
+            }
+
+        try {
+            const response = await fetch(`http://54.180.235.48:8000/api/posts/${postId}`, {
+                method: "PATCH",
+                credentials: "include",
+                body: formData
+            });
+
+            const responseData = await response.json();
+
+            if (!response.ok) throw new Error(responseData.message || "게시글 수정에 실패했습니다."); 
+
+            console.log(responseData.data)
+            alert("게시글이 수정되었습니다!");
+            window.location = "/posts"
+
+        } catch (error) {
+            console.error("Error:", error);
+            alert(error.message);
+        }
+    }
+
     // 완료 버튼 클릭 핸들러
     updateForm.addEventListener("submit", async (event) => {
         event.preventDefault(); 
@@ -78,26 +107,10 @@ document.addEventListener("DOMContentLoaded", async() => {
             // TODO: 작성 완료 처리 로직 (API 호출 등)
             const title = titleInput.value;
             const content = contentInput.value;
-            const image = imageInput.value; // 이미지 파일 추가
+            const image = imageInput.files[0]; // 이미지 파일 추가
 
-            try {
-                const response = await fetch(`http://localhost:8000/api/posts/${postId}`, {
-                    method: "PATCH",
-                    body: new URLSearchParams({title, content, image}),
-                });
+            await updatePost(title, content, image);
 
-                if (response.ok) {
-                    const result = await response.json();
-                    alert(result.message || "게시글이 수정되었습니다!");
-                    window.location = "/posts"
-                } else {
-                    const error = await response.json();
-                    alert(error.message || "게시글 수정에 실패했습니다.");
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                alert("요청 처리 중 오류가 발생했습니다.");
-            }
         }
     });
     // 드롭다운 메뉴 리스너
@@ -114,7 +127,7 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     logout.addEventListener("click", async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/auth/logout', {
+            const response = await fetch(`http://54.180.235.48:8000/api/auth/logout`, {
                 method: 'POST',
                 // credentials: 'include', // 세션 쿠키를 포함
             });
