@@ -1,6 +1,7 @@
 console.log('fe-signup-js-connected');
 
 document.addEventListener("DOMContentLoaded", () => {
+    const backButton = document.getElementById('backButton');
     const profileInput = document.getElementById("profile_img");
     const profileHelper = document.getElementById("profile-helper");
     const emailInput = document.getElementById("email");
@@ -17,7 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     submitButton.disabled = true;
     submitButton.style.backgroundColor = "#ddd";
-    
+    backButton.addEventListener("click", () => {
+        history.back();
+    });
     // 프로필 사진 유효성 검사
     function validateProfile() {
         if (!profileInput.files.length) {
