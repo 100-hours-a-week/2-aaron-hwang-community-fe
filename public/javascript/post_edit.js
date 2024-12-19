@@ -25,18 +25,22 @@ document.addEventListener("DOMContentLoaded", async() => {
         const userProfileImage = document.querySelector('.profile-img > img');
         userProfileImage.src = `data:image/jpeg;base64,${data.data.profile_img}`; // 프로필 이미지 설정
         userProfileImage.alt = data.data.username; // 사용자 이름
-        
-        // 로그인 상태이면 게시글 페이지로 이동
-        if (sessionUser) homeLink.href = '/posts';
     })
     .catch(error => {
             console.error('사용자 정보 조회 실패:', error);
         // 로그인이 필요한 경우 로그인 페이지로 리디렉션 가능
     });
 
+    // 로그인 상태에 따라 홈링크 다르게 이동
+    homeLink.addEventListener('click', () => {
+        if (sessionUser) window.location.href = '/posts';
+        else window.location.href = '/';
+    })
+
     backButton.addEventListener("click", () => {
         history.back();
     });
+
     // 제목 입력 이벤트 핸들러
     titleInput.addEventListener("input", () => {
         const titleLength = titleInput.value.length;

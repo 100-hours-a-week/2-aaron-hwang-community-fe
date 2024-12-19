@@ -25,14 +25,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             userProfileImage.src = `data:image/jpeg;base64,${data.data.profile_img}`; // 프로필 이미지 설정
             userProfileImage.alt = data.data.email; // 사용자 이메일
 
-            // 로그인 상태이면 게시글 페이지로 이동
-            if (sessionUser) homeLink.href = '/posts';
+            
     })
     .catch(error => {
             console.error('사용자 정보 조회 실패:', error);
         // 로그인이 필요한 경우 로그인 페이지로 리디렉션 가능
     });
 
+    // 로그인 상태에 따라 홈링크 다르게 이동
+    homeLink.addEventListener('click', () => {
+        if (sessionUser) window.location.href = '/posts';
+        else window.location.href = '/';
+    })
+    
     fetch(`http://54.180.235.48:8000/api/posts`, {
         method: 'GET',
     })

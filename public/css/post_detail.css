@@ -13,20 +13,24 @@ header {
     align-items: center;
     border-bottom: 1px solid #191919;
 }
-.anchor-title {
-    text-decoration: none !important;
+#header-wrapper {
+    width: 500px;
+    height: 55%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 .title-home {
     font-size: 35px;
 }
 .backButton-wrapper {
-    width: 10%;
+    width: 25%;
     display: flex;
     align-items: center;
     justify-content: left;
 }
 .profile-img-wrapper{
-    width: 10%;
+    width: 25%;
     height: 100%;
     display: flex;
     align-items: center;
