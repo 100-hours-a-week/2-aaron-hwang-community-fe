@@ -63,7 +63,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.querySelector('.post-author').textContent = post.author_username;
         document.querySelector('.post-date').textContent = post.created_at;
         document.querySelector('.post-content').innerHTML = `<p>${post.content}</p>`;
-        document.querySelector('.post-content-img').src = `data:image/jpeg;base64,${post.image}`;
+        console.log(post.image);
+        post.image? document.querySelector('.post-content-img').src = `data:image/jpeg;base64,${post.image}`:document.querySelector('.post-content-img').style.display='none';
         document.querySelector('#likes-wrapper').innerHTML = `${likes.length >= 1000 ? (likes.length / 1000).toFixed(1) + 'k' : likes.length}<br>좋아요수`;
         document.querySelector('#views-wrapper').innerHTML = `${post.views >= 1000 ? (post.views / 1000).toFixed(1) + 'k' : post.views}<br>조회수`;
         document.querySelector('#comments-wrapper').innerHTML = `${commentList.length >= 1000 ? (commentList.length / 1000).toFixed(1) + 'k' : commentList.length}<br>댓글 수`;
