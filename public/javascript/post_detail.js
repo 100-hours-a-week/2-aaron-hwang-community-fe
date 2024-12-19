@@ -67,17 +67,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         initializeLikeButton(post);
         likeButton.addEventListener('click', () => toggleLike(post));
 
-        commentList.forEach(async comment => {
-            await fetch(`http://54.180.235.48:8000/api/users/${comment.author_id}`, {
+        const fetchPromises = commentList.map(async comment => {
+            const response = await fetch(`http://54.180.235.48:8000/api/users/${comment.author_id}`, {
                 method: 'GET',
                 credentials: 'include', // 쿠키 포함
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                const commentAuthor = data.data
+            });
+            const data = await response.json();
+            return {
+                comment,
+                commentAuthor: data.data,
+            };
+        });
+        
+        // 모든 요청 완료 후 처리
+        Promise.all(fetchPromises).then(results => {
+            // 최신 댓글 순으로 정렬
+            results.sort((a, b) => new Date(b.comment.created_at) - new Date(a.comment.created_at));
+        
+            results.forEach(({ comment, commentAuthor }) => {
                 const commentElement = document.createElement('div');
                 commentElement.className = `comment-item`;
-                commentElement.setAttribute("alt", comment.id );
+                commentElement.setAttribute("alt", comment.id);
                 commentElement.innerHTML = `
                     <div class='comment-header'>
                         <div class="post-info">
@@ -85,25 +95,24 @@ document.addEventListener('DOMContentLoaded', async () => {
                                 <img src="data:image/jpeg;base64,${commentAuthor.profile_img}" alt="프로필 이미지">
                             </div>
                             <span class="comment-author">${commentAuthor.username}</span>
-                            <span class="comment-date">${comment.created_at} ${comment.created_at === comment.updated_at?' ':'(수정됨)'}</span>
+                            <span class="comment-date">${comment.created_at} ${comment.created_at === comment.updated_at ? ' ' : '(수정됨)'}</span>
                         </div>
                         <span id= "comment-content" class="comment-content">${comment.content}</span>
                     </div>
-                    
                 `;
                 // 댓글 작성자랑 현재 사용자가 같은 경우에만 수정/삭제 버튼 추가
                 if (commentAuthor.id == sessionUser.id) {
                     commentElement.innerHTML += `
-                    <div class="post-detail-button-wrapper">
-                        <button id="editComment" class="editComment">수정</button>
-                        <button id="deleteComment" class="deleteComment">삭제</button>
-                    </div>`
+                        <div class="post-detail-button-wrapper">
+                            <button id="editComment" class="editComment">수정</button>
+                            <button id="deleteComment" class="deleteComment">삭제</button>
+                        </div>`;
                 }
                 commentsContainer.appendChild(commentElement);
-    
-            })
-            
-        })
+            });
+        }).catch(error => {
+            console.error('Error fetching comments:', error);
+        });
     })
 
     commentsContainer.addEventListener('click', event => {
@@ -199,7 +208,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             if (response.ok) {
                 const result = await response.json();
-                alert(result.message || `${flag} 되었습니다!`);
                 window.location = `/posts/${postId}`
             } else {
                 const error = await response.json();
