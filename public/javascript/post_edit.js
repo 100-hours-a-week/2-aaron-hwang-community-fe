@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", async() => {
+    const backButton = document.getElementById('backButton');
     const updateForm = document.getElementById("updateForm");
     const titleInput = document.getElementById("title");
     const contentInput = document.getElementById("content");
