@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             const response = await fetch(`http://54.180.235.48:8000/api/auth/logout`, {
                 method: 'POST',
-                // credentials: 'include', // 세션 쿠키를 포함
+                credentials: 'include', // 세션 쿠키를 포함
             });
 
             if (response.ok) {
