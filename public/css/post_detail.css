@@ -155,12 +155,18 @@ button:hover {
 }
 .post-detail-body {
     margin-bottom: 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .post-content-img {
-    width: 100%;
-    object-fit: cover;
+    width: 500px;
+    height: 350px;
+    object-fit: contain;
 }
-
+.post-content{
+    width: 100%;
+}
 .post-detail-footer {
     display: flex;
     gap: 15px;
