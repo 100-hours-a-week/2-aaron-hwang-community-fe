@@ -99,6 +99,7 @@ main {
     display: flex;
     justify-content: right;
     margin-bottom: 20px; 
+    width: 506px;
 }
 button[id = post_create] {
     width: 25%;
