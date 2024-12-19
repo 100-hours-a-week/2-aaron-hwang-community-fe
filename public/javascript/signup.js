@@ -127,34 +127,46 @@ document.addEventListener("DOMContentLoaded", () => {
     passwordConfirmInput.addEventListener("input", validateForm);
     usernameInput.addEventListener("input", validateForm);
 
+    const signup = async (email, pwd, pwd2, profile_img, username) => {
+        try {
+            const formData = new FormData();
+            formData.append('email', email);
+            formData.append('pwd', pwd);
+            formData.append('pwd2', pwd2);
+            formData.append('username', username);
+            if (profile_img) {
+                formData.append('image', profile_img);
+            }
+
+            const response = await fetch(`http://54.180.235.48:8000/api/auth/signup`, {
+                method: "POST",
+                //credentials: "include",
+                body: formData
+            });
+            
+            const responseData = await response.json();
+
+            if (!response.ok) throw new Error(responseData.message || '회원 가입에 실패했습니다.'); 
+
+            console.log(responseData.data)
+            alert("회원가입 되었습니다!");
+            window.location = "/posts"
+            
+        } catch (error) {
+            console.error("Error:", error);
+            alert(error.message);
+        }
+    }
     signupForm.addEventListener("submit", async (event) => {
         event.preventDefault();             
         const email = emailInput.value;
         const pwd = passwordInput.value;
         const pwd2 = passwordConfirmInput.value;
-        const profile_img = reader.readAsArrayBuffer(profileInput.files[0]);
+        const profile_img = profileInput.files[0];
         const username = usernameInput.value;
-        
-        try {
-            const response = await fetch(`http://54.180.235.48:8000/api/auth/signup`, {
-                method: "POST",
-                body: new URLSearchParams({email, pwd, pwd2, profile_img, username}),
-                credentials: "include"
-            });
-            console.log(response)
 
-            if (response.ok) {
-                const result = await response.json();
-                alert(result.message || "회원가입 되었습니다!");
-                window.location = "/posts"
-            } else {
-                const error = await response.json();
-                alert(error.message || "회원 가입에 실패했습니다.");
-            }
-        } catch (error) {
-            console.error("Error:", error);
-            alert("요청 처리 중 오류가 발생했습니다.");
-        }
+        await signup(email, pwd, pwd2, profile_img, username);
+        
     });
 
     document
@@ -168,12 +180,24 @@ document.addEventListener("DOMContentLoaded", () => {
         .addEventListener('change', function (event) {
             const reader = new FileReader();
             reader.onload = function () {
-                const preview = document.getElementById('profilePreview');
                 console.log('fe-signup.js:img-reader',reader)
-                preview.src = reader.result;
-                preview.style.display = 'block';
+                const arrayBuffer = reader.result; // ArrayBuffer 데이터
+                const base64String = arrayBufferToBase64(arrayBuffer); // ArrayBuffer -> Base64 변환
+                const preview = document.getElementById('profilePreview');
+                console.log('fe-signup.js:img-reader', base64String);
+                preview.src = "data:image/jpeg;base64," + base64String;
             };
             reader.readAsArrayBuffer(event.target.files[0]);
-            console.log('fe-signup.js:img-reader2', reader)
+            console.log('fe-signup.js:img-reader2', event.target.files[0])
         });
+        // ArrayBuffer를 Base64 문자열로 변환하는 함수
+    function arrayBufferToBase64(buffer) {
+        let binary = '';
+        const bytes = new Uint8Array(buffer);
+        const len = bytes.byteLength;
+        for (let i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return btoa(binary); // Base64 인코딩
+    }
 });
