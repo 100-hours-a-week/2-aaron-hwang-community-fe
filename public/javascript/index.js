@@ -1,4 +1,4 @@
-console.log('fe-index-js-connected');
+console.log('fe-index-js-connected', window.fetchURL);
 document.addEventListener('DOMContentLoaded', function () {
     const loginForm = document.getElementById('loginForm');
     const emailInput = document.getElementById('email');
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const password = document.getElementById("pwd").value;
     
         try{
-            fetch(`http://54.180.235.48:8000/api/auth/login`, {
+            fetch(`${window.fetchURL}/api/auth/login`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {

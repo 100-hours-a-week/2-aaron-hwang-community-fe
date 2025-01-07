@@ -1,0 +1,1 @@
+window.fetchURL = 'http://43.201.21.191:8000'

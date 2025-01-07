@@ -1,5 +1,4 @@
 console.log('fe-signup-js-connected');
-// const BACKEND_URL = process.env.dev.APP_BACKEND_URL;
 
 document.addEventListener("DOMContentLoaded", async () => {
     const email = document.getElementById("email");
@@ -19,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const file = document.getElementById('edit_img')
     let sessionUser;
 
-    await fetch(`http://54.180.235.48:8000/api/users`, {
+    await fetch(`${window.fetchURL}/api/users`, {
         method: 'GET',
         credentials: 'include'  // 세션 쿠키를 포함하여 전송
     })
@@ -74,7 +73,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 console.log(key, value);
             }
 
-            const response = await fetch(`http://54.180.235.48:8000/api/users/${userId}`, {
+            const response = await fetch(`${window.fetchURL}/api/users/${userId}`, {
                 method: "PATCH",
                 credentials: "include",
                 body: formData
@@ -120,7 +119,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     dropUser.addEventListener("click",  () => {
         showModal("정말로 탈퇴하시겠습니까?", async () => {
             try{
-                const response = await fetch(`http://54.180.235.48:8000/api/users/${userId}`,{
+                const response = await fetch(`${window.fetchURL}/api/users/${userId}`,{
                     method: "DELETE",
                     credentials: "include"
                 });
@@ -183,7 +182,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     logout.addEventListener("click", async () => {
         try {
-            const response = await fetch(`http://54.180.235.48:8000/api/auth/logout`, {
+            const response = await fetch(`${window.fetchURL}/api/auth/logout`, {
                 method: 'POST',
                 credentials: 'include', // 세션 쿠키를 포함
             });

@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 formData.append('image', profile_img);
             }
 
-            const response = await fetch(`http://54.180.235.48:8000/api/auth/signup`, {
+            const response = await fetch(`${window.fetchURL}/api/auth/signup`, {
                 method: "POST",
                 //credentials: "include",
                 body: formData

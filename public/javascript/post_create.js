@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const homeLink = document.getElementById("homeLink");
     let sessionUser;
 
-    await fetch(`http://54.180.235.48:8000/api/users`, {
+    await fetch(`${window.fetchURL}/api/users`, {
         method: 'GET',
         credentials: 'include'  // 세션 쿠키를 포함하여 전송
     })
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 formData.append('image', imageFile); // 파일 데이터
             }
 
-            const response = await fetch(`http://54.180.235.48:8000/api/posts/`, {
+            const response = await fetch(`${window.fetchURL}/api/posts/`, {
                 method: "POST",
                 credentials: "include",
                 body: formData
@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     logout.addEventListener("click", async () => {
         try {
-            const response = await fetch(`http://54.180.235.48:8000/api/auth/logout`, {
+            const response = await fetch(`${window.fetchURL}/api/auth/logout`, {
                 method: 'POST',
                 credentials: 'include', // 세션 쿠키를 포함
             });
