@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             console.log(responseData.data)
             alert("회원가입 되었습니다!");
-            window.location = "/posts"
+            window.location = "/"
             
         } catch (error) {
             console.error("Error:", error);

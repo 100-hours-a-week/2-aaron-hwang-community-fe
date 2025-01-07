@@ -31,6 +31,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     })
     .catch(error => {
             console.error('사용자 정보 조회 실패:', error);
+            alert("로그인 후 이용해주세요");
+            window.location.href = '/';
         // 로그인이 필요한 경우 로그인 페이지로 리디렉션 가능
     });
 
