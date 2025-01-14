@@ -87,21 +87,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                 method: 'GET',
             });
             const data = await response.json();
-
+            console.log(data)
             // 데이터가 없는 경우 로딩 중단
-            if (!data || !data.data || data.data.length === 0) {
+            if (!data || !data.data || data.data.length === 0 || data.EOD) {
                 console.log('EOD')
                 window.removeEventListener('scroll', scrollHandler);
                 isLoading = false;
                 return;
             }
 
-            console.log(data)
             data.data.forEach(post => {
                 const postElement = document.createElement('fieldset');
                 postElement.className = `post-outerline`;
 
-                console.log(post)
                 // 게시글 제목, 날짜, 작성자 등 표시
                 postElement.innerHTML = `
                     <div class="post-item">
