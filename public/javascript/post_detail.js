@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     .then(data => {
         sessionUser = data.data;
         const userProfileImage = document.querySelector('.profile-img > img');
-        userProfileImage.src = `data:image/jpeg;base64,${data.data.profile_img}`; // 프로필 이미지 설정
+        userProfileImage.src =data.data.profile_img; // 프로필 이미지 설정
         userProfileImage.alt = data.data.username; // 사용자 이름
     })
     .catch(error => {
@@ -61,12 +61,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         document.querySelector('.post-detail h2').textContent = post.title;
-        document.querySelector('.author-img img').src = `data:image/jpeg;base64,${post.author_profile_img}`;
+        document.querySelector('.author-img img').src = post.author_profile_img;
         document.querySelector('.post-author').textContent = post.author_username;
         document.querySelector('.post-date').textContent = post.created_at;
         document.querySelector('.post-content').innerHTML = `<p>${post.content}</p>`;
         console.log(post.image);
-        post.image? document.querySelector('.post-content-img').src = `data:image/jpeg;base64,${post.image}`:document.querySelector('.post-content-img').style.display='none';
+        post.image? document.querySelector('.post-content-img').src = `${post.image}`:document.querySelector('.post-content-img').style.display='none';
         document.querySelector('#likes-wrapper').innerHTML = `${likes.length >= 1000 ? (likes.length / 1000).toFixed(1) + 'k' : likes.length}<br>좋아요수`;
         document.querySelector('#views-wrapper').innerHTML = `${post.views >= 1000 ? (post.views / 1000).toFixed(1) + 'k' : post.views}<br>조회수`;
         document.querySelector('#comments-wrapper').innerHTML = `${commentList.length >= 1000 ? (commentList.length / 1000).toFixed(1) + 'k' : commentList.length}<br>댓글 수`;
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class='comment-header'>
                         <div class="post-info">
                             <div class="comment-author-img">
-                                <img src="data:image/jpeg;base64,${commentAuthor.profile_img}" alt="프로필 이미지">
+                                <img src="${commentAuthor.profile_img}" alt="프로필 이미지">
                             </div>
                             <span class="comment-author">${commentAuthor.username}</span>
                             <span class="comment-date">${comment.created_at} ${comment.created_at === comment.updated_at ? ' ' : '(수정됨)'}</span>

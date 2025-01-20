@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     .then(data => {
             sessionUser = data.data;
             const userProfileImage = document.querySelector('.profile-img > img');
-            userProfileImage.src = `data:image/jpeg;base64,${data.data.profile_img}`; // 프로필 이미지 설정
+            userProfileImage.src = `${data.data.profile_img}`; // 프로필 이미지 설정
             userProfileImage.alt = data.data.email; // 사용자 이메일
 
             
@@ -90,7 +90,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log(data)
             // 데이터가 없는 경우 로딩 중단
             if (!data || !data.data || data.data.length === 0 || data.EOD) {
-                console.log('EOD')
                 window.removeEventListener('scroll', scrollHandler);
                 isLoading = false;
                 return;
@@ -118,7 +117,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         </div>                       
                     </div>
                     <div class="post-footer">
-                        <img src="data:image/jpeg;base64,${post.author_profile_img}"></img>
+                        <img src="${post.author_profile_img}"></img>
                         <span class="post-author">${post.author_username}</span>
 
                     </div>

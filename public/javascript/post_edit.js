@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     .then(data => {
         sessionUser = data.data;
         const userProfileImage = document.querySelector('.profile-img > img');
-        userProfileImage.src = `data:image/jpeg;base64,${data.data.profile_img}`; // 프로필 이미지 설정
+        userProfileImage.src = `${data.data.profile_img}`; // 프로필 이미지 설정
         userProfileImage.alt = data.data.username; // 사용자 이름
     })
     .catch(error => {
