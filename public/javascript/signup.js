@@ -178,26 +178,25 @@ document.addEventListener("DOMContentLoaded", () => {
     document
         .getElementById('profile_img')
         .addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            
+            if (!file) return;
+
+            const maxSize = 5 * 1024 * 1024; // 5MB 제한
+
+            if (file.size > maxSize) {
+                alert('이미지 크기가 5MB를 초과할 수 없습니다.');
+                event.target.value = ''; // 파일 입력 필드 초기화
+                return;
+            }
             const reader = new FileReader();
             reader.onload = function () {
-                console.log('fe-signup.js:img-reader',reader)
-                const arrayBuffer = reader.result; // ArrayBuffer 데이터
-                const base64String = arrayBufferToBase64(arrayBuffer); // ArrayBuffer -> Base64 변환
                 const preview = document.getElementById('profilePreview');
-                console.log('fe-signup.js:img-reader', base64String);
-                preview.src = "data:image/jpeg;base64," + base64String;
+                preview.src = reader.result;
+                preview.style.display = 'block';
             };
-            reader.readAsArrayBuffer(event.target.files[0]);
-            console.log('fe-signup.js:img-reader2', event.target.files[0])
+            reader.readAsDataURL(file);
+            console.log('fe-signup.js:img-reader', event.target.files[0])
         });
-        // ArrayBuffer를 Base64 문자열로 변환하는 함수
-    function arrayBufferToBase64(buffer) {
-        let binary = '';
-        const bytes = new Uint8Array(buffer);
-        const len = bytes.byteLength;
-        for (let i = 0; i < len; i++) {
-            binary += String.fromCharCode(bytes[i]);
-        }
-        return btoa(binary); // Base64 인코딩
-    }
+        
 });
